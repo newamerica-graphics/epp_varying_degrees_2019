@@ -1,0 +1,164 @@
+.varying-degrees-2018 {
+  text.recharts-label.recharts-text {
+    fill: #fff;
+    font-size: 14px;
+  }
+
+  .recharts-reference-line text.recharts-label.recharts-text{
+    fill: rgb(102, 102, 102);
+  }
+
+  .recharts-cartesian-axis-tick:first-child text,
+  .recharts-cartesian-axis-tick:nth-child(2) text{
+      font-weight: bold;
+      fill: #333;
+  }
+
+  line {
+    stroke: rgba(51,51,51,0.15);
+  }
+
+  svg, .recharts-wrapper {
+    width: 100% !important;
+  }
+
+  .charts-wrapper {
+    min-height: 100vh;
+  }
+
+  .charts{
+    max-width: 650px;
+    position: relative;
+    @media (max-width: 1000px){
+      margin-right: 15px;
+    }
+
+    @media (max-width: 991px){
+      margin: 0 auto;
+    }
+
+    @media (max-width:670px){
+      max-width: calc(100vw - 30px);
+    }
+
+    .total{
+      color: rgba(51,51,51,0.3);
+    }
+  }
+
+  .scroll-to-charts{
+    @media (min-width: 992px){
+      display: none !important;
+    }
+
+    display: none;
+    padding: 15px;
+    border-radius: 100px;
+    box-shadow: 0px 0px 2px 0px rgba(51,51,51,0.15);
+    position: fixed;
+    background: #fff;
+    bottom: 50px;
+    right: 15px;
+    z-index: 10;
+  }
+
+  &.scroll-entered, &.scroll-left{
+    .scroll-to-charts{
+      display: block;
+    }
+  }
+
+  .charts__chart{
+    margin-top: 40px;
+    @media (min-width: 992px){
+      padding-bottom: 40px;
+    }
+  }
+
+  .charts__chart:first-child{
+    margin-top: 0 !important;
+    p:first-child{
+      margin-top: 0;
+    }
+  }
+
+  .chart__question {
+    @media (max-width: 991px){
+      margin-bottom: 0 !important;
+    }
+  }
+
+  .chart__question span{
+    font-weight: bold;
+  }
+
+  .chart__question span.green {
+    color: #22C8A3;
+    text-decoration-color: #22C8A3;
+    -webkit-text-decoration-color: #22C8A3;
+  }
+
+  .chart__question span.red {
+    color: #C23A47;
+    text-decoration-color: #C23A47;
+    -webkit-text-decoration-color: #C23A47;
+  }
+
+  .chart__question span.purple {
+    color: #726FAE;
+    text-decoration-color: #726FAE;
+    -webkit-text-decoration-color: #726FAE;
+  }
+
+  .chart__question span.gray,
+  .chart__question span.black {
+    color: rgba(51,51,51,0.3);
+  }
+
+
+
+  .chart__question span.blue {
+    color: #4876B1;
+    text-decoration-color: #4876B1;
+    -webkit-text-decoration-color: #4876B1;
+  }
+
+  .chart__question span.orange {
+    color: #FD9701;
+    text-decoration-color: #FD9701;
+    -webkit-text-decoration-color: #FD9701;
+  }
+
+  .chart__question span.yellow {
+    color: #F9E053;
+    text-decoration-color: #F9E053;
+    -webkit-text-decoration-color: #F9E053;
+  }
+
+  .recharts-tooltip-item-name,
+  .recharts-tooltip-item-separator{
+    display: none;
+  }
+
+  .recharts-tooltip-label{
+    font-family: 'Circular';
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .recharts-tooltip-item{
+    font-family: 'Circular';
+    font-size: 14px;
+    margin: 0px;
+    padding: 0px !important;
+  }
+
+  .recharts-wrapper{
+    z-index: 10;
+    position: relative;
+  }
+
+  .recharts-wrapper:last-child{
+    z-index: 0;
+  }
+}
