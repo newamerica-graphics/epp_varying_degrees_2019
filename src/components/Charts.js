@@ -129,8 +129,8 @@ export default class Charts extends React.Component {
                  width={120}
                />
             </BarChart>
-            {question.total==0 && <label class="gray margin-top-0 total">(n=1450)</label>}
-            {question.total!==0 && <label class="gray margin-top-0 total">(n={question.total})</label>}
+            {question.total==0 && <label className="gray margin-top-0 total">(n=1450)</label>}
+            {question.total!==0 && <label className="gray margin-top-0 total">(n={question.total})</label>}
             {question.question_id===11 &&
               <label className="block margin-top-15">*Top 6 responses overall. Responses by demographic might be different than what appears here.</label>
             }
