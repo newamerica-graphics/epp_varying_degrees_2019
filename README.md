@@ -2,7 +2,7 @@
 
 Built in 2019 using [Teddy](https://github.com/newamericafoundation/teddy) and the [data-viz-boilerplate](https://github.com/newamericafoundation/data-viz-boilerplate).
 
-2018 version: [varying-degrees-2018](https://github.com/newamerica-graphics/varying-degrees-2018)
+2018 version: [varying-degrees-2018](https://github.com/newamerica-graphics/varying-degrees-2018)  
 2017 version: [varying-degrees](https://github.com/newamericafoundation/varying-degrees) and [varying-degrees-backend](https://github.com/newamericafoundation/varying-degrees-backend)
 
 ## Deployment
