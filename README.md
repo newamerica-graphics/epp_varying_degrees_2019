@@ -1,40 +1,9 @@
-# Boilerplate for Creating Data Viz on newamerica.org
+# Varying Degrees 2019
 
-## Setup
+Built in 2019 using [Teddy](https://github.com/newamericafoundation/teddy) and the [data-viz-boilerplate](https://github.com/newamericafoundation/data-viz-boilerplate).
 
-Install our [data visualization project generator](https://github.com/newamericafoundation/na-cli): `npm i -g @newamerica/na-cli`. Then run: `na-cli setup YOUR-PROJECT-SLUG -d path/to/install/directory`. That's it!
-
-Alternatively, you can set up a project manually:
-
-Run `git clone https://github.com/newamerica-graphics/data-viz-boilerplate.git`.
-
-Before starting to build, run `npm install` and change the git origin `git remote set-url origin https://github.com/newamerica-graphics/REPOSITORY.git`, after creating a new repo in the [newamerica-graphics](https://github.com/newamerica-graphics) organization.
-
-Change the `name` of the project in [`package.json`](https://github.com/newamericafoundation/data-viz-boilerplate/blob/master/package.json#L2) to your repository's name. This will be the name of the directory the project is deployed to on s3 (see [deploy.sh](https://github.com/newamerica-graphics/epp_polling_dashboard/blob/master/deploy.sh)). Make sure the name of the repository in github is the same as this project slug, because the github repo will be linked to from data.newamerica.org. The convention for project names is program initials, project slug: `epp_polling_dashboard`.
-
-Once you've scaffolded/cloned the boilerplate:
-
-1. Define all chartIDs that will be referenced in wagtail inside [webpack.config.js](https://github.com/newamericafoundation/data-viz-boilerplate/blob/master/webpack.config.js#L24)
-2. Build your graphic any way you like
-3. Inside `src/index.js` define initialization functions for each graphic. It may look something like this:
-
-```js
-var settings = {
-  "id-for-chart1": chart1init,
-  "id-for-chart2": chart2init
-};
-
-window.renderDataViz = function(el) {
-  let id = el.getAttribute(id);
-  if (settings[id]) settings[id](el);
-};
-```
-
-`newamericadotorg` looks for any element with the class `.na-dataviz`, and if a `renderDataViz` function is defined globally, calls it for each element. You can see a mock of what happens in the [index.html file](https://github.com/newamericafoundation/data-viz-boilerplate/blob/master/src/index.html#L42-L47).
-
-## Charts, Maps, and UI Components
-
-[Teddy](https://github.com/newamericafoundation/teddy) is a library of charts, maps, and user interface components we've built to support New America's data viz work. These are no longer included by default in the boilerplate, but can be installed through npm (alternatively, the `na-cli` utility can also install these packages for you). Teddy is mostly built with React and a low-level data visualization library called [vx](https://vx-demo.now.sh/). While you don't have to use React or vx to build a graphic, we find that it speeds up development considerably, and using our predefined components enforces visual styles across all data viz projects.
+2018 version: [varying-degrees-2018](https://github.com/newamerica-graphics/varying-degrees-2018)
+2017 version: [varying-degrees](https://github.com/newamericafoundation/varying-degrees) and [varying-degrees-backend](https://github.com/newamericafoundation/varying-degrees-backend)
 
 ## Deployment
 
