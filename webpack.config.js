@@ -20,8 +20,10 @@ module.exports = env => {
     plugins: [
       env.deploy === "development" && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
-        title: "",
-        chartIDs: [],
+        title: "EPP Varying Degrees 2019",
+        chartIDs: [
+          "test"
+        ],
         inject: false,
         template: path.resolve(__dirname, "src/index.html")
       }),

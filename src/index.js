@@ -1,15 +1,28 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import Dashboard from "./Dashboard";
 import './index.scss';
 
 let queue = [];
 let data = null;
 
 const settings = {
-  'viz__id': (el) => {
-    // use data
+  'test': el => {
+    ReactDOM.render(
+      [
+        <Dashboard
+          questions={data.questions}
+          data={data.answers}
+          demographic_keys={data.demographic_keys}
+          demographic_values={data.demographic_values}
+        />
+      ],
+      el
+    )
   }
 };
 
-fetch('endpoint').then(response => response.json()).then((_data)=>{
+fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2019.json').then(response => response.json()).then((_data)=>{
   data = _data;
   for(let i=0; i<queue.length; i++)
     queue[i]();
