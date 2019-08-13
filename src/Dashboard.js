@@ -116,6 +116,7 @@ export default class Dashboard extends React.Component {
   render() {
     const filter_demographic = this.state.filter_demographic;
     const filter_finding = this.state.filter_finding;
+
     let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
     let questions = this.questions
       .filter(q => 
@@ -124,6 +125,11 @@ export default class Dashboard extends React.Component {
           .map(finding_question => finding_question.question_number)
         .includes(q.question_number)
       );
+    let barsFilter = d =>
+      filter_demographic == this.total_demographic
+        ? d.demographic_key == filter_demographic
+        : d.demographic_key == filter_demographic || d.demographic_key == "Overall";
+      
     return (
       <ChartContainer>
         <ButtonGroup
@@ -154,11 +160,9 @@ export default class Dashboard extends React.Component {
               {props => 
                 (
                   <HorizontalStackedBar
-                    data={q.demographics
-                      .filter(d => d.demographic_key == filter_demographic || (filter_demographic != this.total_demographic && d.demographic_key == "Overall"))
-                      .reverse()}
+                    data={q.demographics.filter(barsFilter).reverse()}
                     y={d => d.demographic_value}
-                    keys={Object.keys(q.demographics.filter(d => d.demographic_key == filter_demographic)[0]).filter(key => 
+                    keys={Object.keys(q.demographics.find(d => d.demographic_key == filter_demographic)).filter(key => 
                       key != "demographic_key" 
                       && key != "demographic_value" 
                     )}
