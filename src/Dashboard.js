@@ -9,12 +9,18 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {
       filter_demographic: 'Total',
-      filter_finding: 'jobs'
+      filter_finding: 'jobs',
     };
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
+    this.data = this.props.data.answers.filter(d => 
+      d["Responses"] 
+      && !d["Responses"].includes("(NET)") // TODO don't hard code which ones to skip
+      && !d["Responses"].includes("Mean")
+      && !d["Responses"].includes("MEDIAN")
+    );
     this.comparison_demographic = this.props.data.meta[0].comparison_demographic;
     this.total_demographic = this.props.data.meta[0].demographic_key_for_total;
 
@@ -23,13 +29,22 @@ export default class Dashboard extends React.Component {
     {
       question_number: "2A",
       content: "To the best of your knowledge, do you believe people with the following levels of education earn more, less, or about the same as those who did not receive any education beyond high school? - Some technical education or college, but no degree",
-      demographics: [
+      total: { // this is for comparison
+         demographic_value: "2019",
+        "Much more": "2%", // "Response" for the first value
+        "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
+        ...
+      }
+      demographic_keys: [
         {
           demographic_key: "Total",
-          demographic_value: "2019",
-          "Much more": "2%", // "Response" for the first value
-          "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
-          ...
+          demographic_total: 5023,
+          demographics: [
+            demographic_value: "2019",
+            "Much more": "2%", // "Response" for the first value
+            "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
+            ...
+          ]
         },
         ...
       ]
@@ -38,69 +53,55 @@ export default class Dashboard extends React.Component {
     */
     this.questions = this.props.data.questions
     .map(q => {
-      let q_data = this.props.data.answers.filter(d => 
+      let q_data = this.data.filter(d => 
         d["Q Number"] == q.question_number 
       );
       return ({
         question_number: q.question_number,
         content: q.content,
-        demographics: [
-          {
-            ...Object.assign( // QUESTION do I need `...Object.assign`
-              {
-                demographic_key: "Overall",
-                demographic_value: "Total",
-              }, 
-              ...Object.keys(q_data)
-                .filter(d => 
-                  q_data[d]["Responses"] 
-                  && !q_data[d]["Responses"].includes("(NET)") // TODO don't hard code which to skip
-                  && !q_data[d]["Responses"].includes("Mean")
-                  && !q_data[d]["Responses"].includes("MEDIAN")
-                )
-                .map(d => {
-                  let row = q_data[d];
-                  let row_percent = q_data[Number(d)+1];
-                  return ({
-                    [row["Responses"]]:
-                      row[this.comparison_demographic] == 0 || row_percent[this.comparison_demographic] == null
-                      ? '0'
-                      : row_percent[this.comparison_demographic].trim().slice(0,-1)
-                  })}
-                )
-              )
-          },
-          ...Object.keys(this.props.data.demographic_values)
-          .map(value => {
-            let demographic = this.props.data.demographic_values[value];
-            let demographic_full = demographic.demographic_full;
-            return (
-              Object.assign(
-                {
-                  demographic_key: demographic.demographic_key,
-                  demographic_value: demographic.demographic_value,
-                }, 
-                ...Object.keys(q_data)
-                .filter(d => 
-                  q_data[d]["Responses"] 
-                  && !q_data[d]["Responses"].includes("(NET)") // TODO don't hard code which to skip
-                  && !q_data[d]["Responses"].includes("Mean")
-                  && !q_data[d]["Responses"].includes("MEDIAN")
-                )
-                .map(d => {
-                  let row = q_data[d];
-                  let row_percent = q_data[Number(d)+1];
-                  return ({
-                    [row["Responses"]]:
-                      row[demographic_full] == 0 || row_percent[demographic_full] == null
-                      ? '0'
-                      : row_percent[demographic_full].trim().slice(0,-1)
-                  })}
-                )
-              )
-            )
-          })
-        ]
+        total: [
+          Object.assign(
+            {
+              demographic_value: "Total",
+              demographic_total:
+                Object.keys(q_data).reduce((acc,cur) => acc + (Number(q_data[cur][this.comparison_demographic]) > 0 ? Number(q_data[cur][this.comparison_demographic]) : 0), 0),
+            }, 
+            ...q_data.map(row => ({
+              [row["Responses"]]:
+                row[this.comparison_demographic]
+            }))
+          )
+        ],
+        demographic_keys: 
+          this.props.data.demographic_keys
+            .map(key => {
+              let demographic_values = this.props.data.demographic_values.filter(d => d.demographic_key == key.demographic_key);
+              let response_data = q_data.map(row => 
+                  Object.assign(...Object.keys(row)
+                    .filter(k => demographic_values.map(d => d.demographic_full).includes(k) || k == "Responses")
+                    .map(k => ({[k]: row[k]}))
+                  )
+                );
+              return ({
+                demographic_key: key.demographic_key,
+                demographics: [
+                  ...demographic_values.map(demographic => 
+                    Object.assign(
+                      {
+                        demographic_value: demographic.demographic_value,
+                        demographic_total:
+                          Object.keys(response_data).filter(k => k != "Responses").reduce((acc,cur) => acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0), 0),
+                      }, 
+                      ...response_data.map(row => ({
+                        [row["Responses"]]:
+                          row[demographic.demographic_full]
+                      }))
+                    )
+                  )
+                ]
+              })
+            })
+            .reduce((acc,cur) => acc.concat(cur),[])
       })}
     );
   }
@@ -125,10 +126,6 @@ export default class Dashboard extends React.Component {
           .map(finding_question => finding_question.question_number)
         .includes(q.question_number)
       );
-    let barsFilter = d =>
-      filter_demographic == this.total_demographic
-        ? d.demographic_key == filter_demographic
-        : d.demographic_key == filter_demographic || d.demographic_key == "Overall";
       
     return (
       <ChartContainer>
@@ -153,19 +150,35 @@ export default class Dashboard extends React.Component {
               renderTooltip={({ datum }) => (
                 <div style={{ display: "flex" }}>
                   <span style={{ paddingRight: "3px" }}>{datum.key}: </span>
-                  <span>{datum.bar.data[datum.key]}%</span>
+                  <span>{Math.round(datum.bar.data[datum.key])}%</span>
                 </div>
               )}
             >
-              {props => 
-                (
+              {props => {
+                let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics;
+                demographics = filter_demographic == this.total_demographic ? demographics : q.total.concat(demographics);
+                
+                let keys = Object.keys(demographics[0]).filter(key => 
+                  key != "demographic_value" 
+                  && key != "demographic_total" 
+                );
+
+                let demographics_percent = demographics.map(d => 
+                  Object.assign(...Object.keys(d).map(key => 
+                    ({
+                      [key]: 
+                        keys.includes(key) 
+                        ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
+                        : d[key]
+                    })
+                  ))
+                );
+
+                return (
                   <HorizontalStackedBar
-                    data={q.demographics.filter(barsFilter).reverse()}
+                    data={demographics_percent.reverse()}
                     y={d => d.demographic_value}
-                    keys={Object.keys(q.demographics.find(d => d.demographic_key == filter_demographic)).filter(key => 
-                      key != "demographic_key" 
-                      && key != "demographic_value" 
-                    )}
+                    keys={keys}
                     colors={[
                       colors.turquoise.dark,
                       colors.turquoise.medium,
@@ -179,7 +192,7 @@ export default class Dashboard extends React.Component {
                     {...props}
                   />
                 )
-              }
+              }}
             </Chart>
           </div>
         ))}
