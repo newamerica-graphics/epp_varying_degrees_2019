@@ -8,10 +8,12 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter_demographic: 'Total'
+      filter_demographic: 'Total',
+      filter_finding: 'jobs'
     };
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
+    this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
     /*
     This is the format for the new questions data object:
@@ -23,7 +25,7 @@ export default class Dashboard extends React.Component {
           demographic_key: "Total",
           demographic_value: "2019",
           "Much more": "2%", // "Response" for the first value
-          "Somewhat": "5%",  // same as above, for an arbitrary number of responses
+          "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
           ...
         },
         ...
@@ -31,23 +33,23 @@ export default class Dashboard extends React.Component {
     },
     ...
     */
-    this.questions = this.props.questions
+    this.questions = this.props.data.questions
     .map(q => {
-      let q_data = this.props.data.filter(d => 
+      let q_data = this.props.data.answers.filter(d => 
         d["Q Number"] == q.question_number 
       );
       return ({
         question_number: q.question_number,
         content: q.content,
         demographics: [
-          ...Object.keys(this.props.demographic_values)
+          ...Object.keys(this.props.data.demographic_values)
           .map(value => {
-            let demographic_full = this.props.demographic_values[value].demographic_full;
+            let demographic_full = this.props.data.demographic_values[value].demographic_full;
             return (
               Object.assign(
                 {
-                  demographic_key: this.props.demographic_values[value].demographic_key,
-                  demographic_value: this.props.demographic_values[value].demographic_value,
+                  demographic_key: this.props.data.demographic_values[value].demographic_key,
+                  demographic_value: this.props.data.demographic_values[value].demographic_value,
                 }, 
                 ...Object.keys(q_data)
                 .filter(d => 
@@ -78,83 +80,70 @@ export default class Dashboard extends React.Component {
     this.setState({filter_demographic: demographic})
   }
 
+  handleFilterFindingChange(finding) {
+    this.setState({filter_finding: finding})
+  }
+
   render() {
     const filter_demographic = this.state.filter_demographic;
+    const filter_finding = this.state.filter_finding;
+    let questions = this.questions
+      .filter(q => 
+        this.props.data.question_groups
+          .filter(d => d.finding == filter_finding)
+          .map(finding_question => finding_question.question_number)
+        .includes(q.question_number)
+      );
     return (
       <ChartContainer>
         <Select
-          onChange={this.handleFilterDemographicChange}
-          options={this.props.demographic_keys.map(d => d.demographic_key)}
+          onChange={this.handleFilterFindingChange}
+          options={this.props.data.findings.map(d => d.finding_short)}
         />
-        {this.questions.map(
-          q => (
-            <div>
-              <Title>{q.question_number}: {q.content}</Title>
-              {this.props.demographic_keys
-              .filter(d => d.demographic_key == filter_demographic)
-              .map(chart_demographic => (
-                <div>
-                  <Title>{chart_demographic.demographic_key}</Title>
-                  <Chart
-                    maxWidth={650}
-                    height={350}
-                    renderTooltip={({ datum }) => (
-                      <div style={{ display: "flex" }}>
-                        <span style={{ paddingRight: "3px" }}>{datum.key}: </span>
-                        <span>{datum.bar.data[datum.key]}%</span>
-                      </div>
-                    )}        
-                  >
-                    {props => 
-                      (
-                        <HorizontalStackedBar
-                          data={q.demographics.filter(d => d.demographic_key == chart_demographic.demographic_key)}
-                          y={d => d.demographic_value}
-                          keys={Object.keys(q.demographics.filter(d => d.demographic_key == chart_demographic.demographic_key)[0]).filter(key => 
-                            key != "demographic_key" 
-                            && key != "demographic_value" 
-                          )}
-                          colors={[
-                            colors.turquoise.dark,
-                            colors.turquoise.medium,
-                            colors.red.light,
-                            colors.red.dark,
-                            colors.blue.light,
-                            colors.blue.very_light,
-                            colors.blue.light,
-                            colors.blue.light,
-                          ]}
-                          {...props}
-                        />
-                      )
-                    }
-                  </Chart>
-
-                  {/* Show data in a list for testing purposes */}
-                  {/* <ul>
-                    {q.demographics
-                    .filter(d => d.demographic_key == chart_demographic.demographic_key)
-                    .map(d => (
-                      <li>
-                        {d.demographic_value}
-                        <ul>
-                          {Object.keys(d)
-                          .filter(key => 
-                            key != "demographic_key" 
-                            && key != "demographic_value" 
-                          )
-                          .map(key => (
-                            <li>{key}: {d[key]}</li>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </ul> */}
+        <Select
+          onChange={this.handleFilterDemographicChange}
+          options={this.props.data.demographic_keys.map(d => d.demographic_key)}
+        />
+        <h1>{filter_finding} filtered by {filter_demographic}</h1>
+        {questions.map(q => (
+          <div>
+            <Title>{q.question_number}: {q.content}</Title>
+            <Chart
+              maxWidth={650}
+              height={350}
+              renderTooltip={({ datum }) => (
+                <div style={{ display: "flex" }}>
+                  <span style={{ paddingRight: "3px" }}>{datum.key}: </span>
+                  <span>{datum.bar.data[datum.key]}%</span>
                 </div>
-              ))}
-            </div>
-          )
-        )}
+              )}
+            >
+              {props => 
+                (
+                  <HorizontalStackedBar
+                    data={q.demographics.filter(d => d.demographic_key == filter_demographic)}
+                    y={d => d.demographic_value}
+                    keys={Object.keys(q.demographics.filter(d => d.demographic_key == filter_demographic)[0]).filter(key => 
+                      key != "demographic_key" 
+                      && key != "demographic_value" 
+                    )}
+                    colors={[
+                      colors.turquoise.dark,
+                      colors.turquoise.medium,
+                      colors.red.light,
+                      colors.red.dark,
+                      colors.blue.light,
+                      colors.blue.very_light,
+                      colors.blue.light,
+                      colors.blue.light,
+                    ]}
+                    {...props}
+                  />
+                )
+              }
+            </Chart>
+          </div>
+        ))}
       </ChartContainer>
     );
   }

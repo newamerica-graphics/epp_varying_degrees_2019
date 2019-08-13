@@ -11,10 +11,7 @@ const settings = {
     ReactDOM.render(
       [
         <Dashboard
-          questions={data.questions}
-          data={data.answers}
-          demographic_keys={data.demographic_keys}
-          demographic_values={data.demographic_values}
+          data={data}
         />
       ],
       el
