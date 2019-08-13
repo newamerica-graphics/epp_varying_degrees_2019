@@ -1,14 +1,20 @@
 import React from "react";
-import { ChartContainer, Title } from "@newamerica/meta";
 import { Chart, HorizontalStackedBar } from "@newamerica/charts";
+import { Select } from "@newamerica/components";
+import { ChartContainer, Title } from "@newamerica/meta";
 import { colors } from "./lib/colors";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      filter_demographic: 'Total'
+    };
+
+    this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
 
     /*
-    This is the format:
+    This is the format for the new questions data object:
     {
       question_number: "2A",
       content: "To the best of your knowledge, do you believe people with the following levels of education earn more, less, or about the same as those who did not receive any education beyond high school? - Some technical education or college, but no degree",
@@ -25,9 +31,7 @@ export default class Dashboard extends React.Component {
     },
     ...
     */
-
     this.questions = this.props.questions
-    // .filter(d => d.question_number == "2A") // can filter to one question so it's quicker to load
     .map(q => {
       let q_data = this.props.data.filter(d => 
         d["Q Number"] == q.question_number 
@@ -70,15 +74,24 @@ export default class Dashboard extends React.Component {
     );
   }
 
+  handleFilterDemographicChange(demographic) {
+    this.setState({filter_demographic: demographic})
+  }
 
   render() {
+    const filter_demographic = this.state.filter_demographic;
     return (
       <ChartContainer>
+        <Select
+          onChange={this.handleFilterDemographicChange}
+          options={this.props.demographic_keys.map(d => d.demographic_key)}
+        />
         {this.questions.map(
           q => (
             <div>
               <Title>{q.question_number}: {q.content}</Title>
               {this.props.demographic_keys
+              .filter(d => d.demographic_key == filter_demographic)
               .map(chart_demographic => (
                 <div>
                   <Title>{chart_demographic.demographic_key}</Title>
