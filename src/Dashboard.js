@@ -44,17 +44,18 @@ export default class Dashboard extends React.Component {
         demographics: [
           ...Object.keys(this.props.data.demographic_values)
           .map(value => {
-            let demographic_full = this.props.data.demographic_values[value].demographic_full;
+            let demographic = this.props.data.demographic_values[value];
+            let demographic_full = demographic.demographic_full;
             return (
               Object.assign(
                 {
-                  demographic_key: this.props.data.demographic_values[value].demographic_key,
-                  demographic_value: this.props.data.demographic_values[value].demographic_value,
+                  demographic_key: demographic.demographic_key,
+                  demographic_value: demographic.demographic_value,
                 }, 
                 ...Object.keys(q_data)
                 .filter(d => 
                   q_data[d]["Responses"] 
-                  && !q_data[d]["Responses"].includes("(NET)")
+                  && !q_data[d]["Responses"].includes("(NET)") // TODO don't hard code which to skip
                   && !q_data[d]["Responses"].includes("Mean")
                   && !q_data[d]["Responses"].includes("MEDIAN")
                 )
