@@ -154,7 +154,6 @@ export default class Dashboard extends React.Component {
               {props => 
                 (
                   <HorizontalStackedBar
-                    data={q.demographics.filter(d => d.demographic_key == filter_demographic)}
                     data={q.demographics
                       .filter(d => d.demographic_key == filter_demographic || (filter_demographic != this.total_demographic && d.demographic_key == "Overall"))
                       .reverse()}
