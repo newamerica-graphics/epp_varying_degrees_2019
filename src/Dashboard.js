@@ -15,6 +15,9 @@ export default class Dashboard extends React.Component {
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
+    this.comparison_demographic = this.props.data.meta[0].comparison_demographic;
+    this.total_demographic = this.props.data.meta[0].demographic_key_for_total;
+
     /*
     This is the format for the new questions data object:
     {
@@ -42,6 +45,31 @@ export default class Dashboard extends React.Component {
         question_number: q.question_number,
         content: q.content,
         demographics: [
+          {
+            ...Object.assign( // QUESTION do I need `...Object.assign`
+              {
+                demographic_key: "Overall",
+                demographic_value: "Total",
+              }, 
+              ...Object.keys(q_data)
+                .filter(d => 
+                  q_data[d]["Responses"] 
+                  && !q_data[d]["Responses"].includes("(NET)") // TODO don't hard code which to skip
+                  && !q_data[d]["Responses"].includes("Mean")
+                  && !q_data[d]["Responses"].includes("MEDIAN")
+                )
+                .map(d => {
+                  let row = q_data[d];
+                  let row_percent = q_data[Number(d)+1];
+                  return ({
+                    [row["Responses"]]:
+                      row[this.comparison_demographic] == 0 || row_percent[this.comparison_demographic] == null
+                      ? '0'
+                      : row_percent[this.comparison_demographic].trim().slice(0,-1)
+                  })}
+                )
+              )
+          },
           ...Object.keys(this.props.data.demographic_values)
           .map(value => {
             let demographic = this.props.data.demographic_values[value];
@@ -123,6 +151,9 @@ export default class Dashboard extends React.Component {
                 (
                   <HorizontalStackedBar
                     data={q.demographics.filter(d => d.demographic_key == filter_demographic)}
+                    data={q.demographics
+                      .filter(d => d.demographic_key == filter_demographic || (filter_demographic != this.total_demographic && d.demographic_key == "Overall"))
+                      .reverse()}
                     y={d => d.demographic_value}
                     keys={Object.keys(q.demographics.filter(d => d.demographic_key == filter_demographic)[0]).filter(key => 
                       key != "demographic_key" 
