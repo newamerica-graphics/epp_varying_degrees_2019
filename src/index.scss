@@ -1,0 +1,29 @@
+.dv-btn-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.dv-btn { // TODO real styles
+    padding: 1em;
+    background: none;
+    border-radius: 0;
+    border: 1px solid #333;
+
+    &:not(:first-child) {
+        border-top-width: 0;
+    }
+
+    &:hover, &:focus, &:active {
+        background-color: rgba(#333, 0.2);
+        cursor: pointer;
+    }
+
+    &-active { // TODO real styles
+        background-color: #333;
+        color: white;
+
+        &:hover, &:focus, &:active {
+            background-color: rgba(#333, 0.8);
+        }
+    }
+}
