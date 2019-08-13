@@ -1,6 +1,6 @@
 import React from "react";
 import { Chart, HorizontalStackedBar } from "@newamerica/charts";
-import { Select } from "@newamerica/components";
+import { ButtonGroup, Select } from "@newamerica/components";
 import { ChartContainer, Title } from "@newamerica/meta";
 import { colors } from "./lib/colors";
 
@@ -116,6 +116,7 @@ export default class Dashboard extends React.Component {
   render() {
     const filter_demographic = this.state.filter_demographic;
     const filter_finding = this.state.filter_finding;
+    let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
     let questions = this.questions
       .filter(q => 
         this.props.data.question_groups
@@ -125,15 +126,18 @@ export default class Dashboard extends React.Component {
       );
     return (
       <ChartContainer>
-        <Select
+        <ButtonGroup
           onChange={this.handleFilterFindingChange}
-          options={this.props.data.findings.map(d => d.finding_short)}
+          options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
+          active={this.props.data.findings[0].finding_short}
         />
         <Select
           onChange={this.handleFilterDemographicChange}
           options={this.props.data.demographic_keys.map(d => d.demographic_key)}
         />
-        <h1>{filter_finding} filtered by {filter_demographic}</h1>
+        <h2>{selected_finding.finding_title}</h2>
+        <h3>Filtered by {filter_demographic}</h3>
+        <p>{selected_finding.finding_description}</p>
         {questions.map(q => (
           <div>
             <Title>{q.question_number}: {q.content}</Title>
