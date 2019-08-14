@@ -1,7 +1,7 @@
 import React from "react";
 import { Chart, HorizontalStackedBar } from "@newamerica/charts";
 import { ButtonGroup, Select } from "@newamerica/components";
-import { ChartContainer, Title } from "@newamerica/meta";
+import { ChartContainer } from "@newamerica/meta";
 import { colors } from "./lib/colors";
 
 export default class Dashboard extends React.Component {
@@ -57,8 +57,10 @@ export default class Dashboard extends React.Component {
         d["Q Number"] == q.question_number 
       );
       return ({
-        question_number: q.question_number,
-        content: q.content,
+        question_number: q.question,
+        question_specific: q.question_number,
+        content_general: q.content_general,
+        content_specific: q.content_specific,
         total: [
           Object.assign(
             {
@@ -119,13 +121,15 @@ export default class Dashboard extends React.Component {
     const filter_finding = this.state.filter_finding;
 
     let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
+    let question_group = this.props.data.question_groups
+      .filter(d => d.finding == filter_finding)
+      .map(finding_question => finding_question.question_number);
     let questions = this.questions
       .filter(q => 
-        this.props.data.question_groups
-          .filter(d => d.finding == filter_finding)
-          .map(finding_question => finding_question.question_number)
-        .includes(q.question_number)
+        question_group.includes(q.question_number)
+        || question_group.includes(q.question_specific)
       );
+    let last_question;
       
     return (
       <ChartContainer>
@@ -134,16 +138,23 @@ export default class Dashboard extends React.Component {
           options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
           active={this.props.data.findings[0].finding_short}
         />
-        <Select
-          onChange={this.handleFilterDemographicChange}
-          options={this.props.data.demographic_keys.map(d => d.demographic_key)}
-        />
-        <h2>{selected_finding.finding_title}</h2>
+        <p>
+          Filter by 
+          <Select
+            onChange={this.handleFilterDemographicChange}
+            options={this.props.data.demographic_keys.map(d => d.demographic_key)}
+          />
+        </p>
+        <h1>{selected_finding.finding_title}</h1>
         <h3>Filtered by {filter_demographic}</h3>
         <p>{selected_finding.finding_description}</p>
-        {questions.map(q => (
+        {questions.map((q) => {
+          let is_new_question = q.content_general != last_question;
+          last_question = q.content_general; 
+          return (
           <div>
-            <Title>{q.question_number}: {q.content}</Title>
+            {is_new_question && (<h2>{q.content_general}</h2> )}
+            {q.content_specific && (<h3>{q.content_specific}</h3>)}
             <Chart
               maxWidth={650}
               height={350}
@@ -195,7 +206,7 @@ export default class Dashboard extends React.Component {
               }}
             </Chart>
           </div>
-        ))}
+        )})}
       </ChartContainer>
     );
   }
