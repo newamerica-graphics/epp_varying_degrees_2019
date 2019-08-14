@@ -8,6 +8,10 @@
     background: none;
     border-radius: 0;
     border: 1px solid #333;
+    text-transform: none;
+    font-size: 1rem;
+    line-height: 1.2;
+    letter-spacing: 0;
 
     &:not(:first-child) {
         border-top-width: 0;
