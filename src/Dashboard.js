@@ -15,12 +15,7 @@ export default class Dashboard extends React.Component {
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
-    this.data = this.props.data.answers.filter(d => 
-      d["Responses"] 
-      && !d["Responses"].includes("(NET)") // TODO don't hard code which ones to skip
-      && !d["Responses"].includes("Mean")
-      && !d["Responses"].includes("MEDIAN")
-    );
+    this.data = this.props.data.answers;
     this.comparison_demographic = this.props.data.meta[0].comparison_demographic;
     this.total_demographic = this.props.data.meta[0].demographic_key_for_total;
 
