@@ -155,8 +155,8 @@ export default class Dashboard extends React.Component {
               height={350}
               renderTooltip={({ datum }) => (
                 <div style={{ display: "flex" }}>
-                  <span style={{ paddingRight: "3px" }}>{datum.key}: </span>
-                  <span>{Math.round(datum.bar.data[datum.key])}%</span>
+                  <strong style={{ marginRight: "0.7em" }}>{datum.key}</strong>
+                  <span>{(datum.bar.data[datum.key] < 1 && datum.bar.data[datum.key]) > 0 ? "<1" : Math.round(datum.bar.data[datum.key])}%</span>
                 </div>
               )}
             >
