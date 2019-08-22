@@ -15,17 +15,17 @@ export default class Dashboard extends React.Component {
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
-    this.data = this.props.data.answers;
+    this.data = this.props.data.data;
     this.comparison_demographic = this.props.data.meta[0].comparison_demographic;
     this.total_demographic = this.props.data.meta[0].demographic_key_for_total;
 
     /*
     This is the format for the new questions data object:
     {
-      question_number: "2A",
-      content: "To the best of your knowledge, do you believe people with the following levels of education earn more, less, or about the same as those who did not receive any education beyond high school? - Some technical education or college, but no degree",
+      Question-level information (question number and text)
       total: { // this is for comparison
-         demographic_value: "2019",
+        demographic_value: "Total",
+        demographic_total: "5023",
         "Much more": "2%", // "Response" for the first value
         "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
         ...
@@ -33,9 +33,9 @@ export default class Dashboard extends React.Component {
       demographic_keys: [
         {
           demographic_key: "Total",
-          demographic_total: 5023,
           demographics: [
             demographic_value: "2019",
+            demographic_total: 5023,
             "Much more": "2%", // "Response" for the first value
             "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
             ...
@@ -115,6 +115,7 @@ export default class Dashboard extends React.Component {
     const filter_demographic = this.state.filter_demographic;
     const filter_finding = this.state.filter_finding;
 
+    let data_is_filtered = filter_demographic != this.total_demographic;
     let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
     let question_group = this.props.data.question_groups
       .filter(d => d.finding == filter_finding)
@@ -141,11 +142,28 @@ export default class Dashboard extends React.Component {
           />
         </p>
         <h1>{selected_finding.finding_title}</h1>
-        <h3>Filtered by {filter_demographic}</h3>
-        <p>{selected_finding.finding_description}</p>
         {questions.map((q) => {
           let is_new_question = q.content_general != last_question;
           last_question = q.content_general; 
+
+          let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics.reverse();
+          demographics = data_is_filtered ? demographics.concat(q.total) : demographics;
+          
+          let keys = Object.keys(demographics[0]).filter(key => 
+            key != "demographic_value" 
+            && key != "demographic_total" 
+          );
+
+          let demographics_percent = demographics.map(d => 
+            Object.assign(...Object.keys(d).map(key => 
+              ({
+                [key]: 
+                  keys.includes(key) 
+                  ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
+                  : d[key]
+              })
+            ))
+          );
           return (
           <div>
             {is_new_question && (<h2>{q.content_general}</h2> )}
@@ -160,45 +178,24 @@ export default class Dashboard extends React.Component {
                 </div>
               )}
             >
-              {props => {
-                let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics;
-                demographics = filter_demographic == this.total_demographic ? demographics : q.total.concat(demographics);
-                
-                let keys = Object.keys(demographics[0]).filter(key => 
-                  key != "demographic_value" 
-                  && key != "demographic_total" 
-                );
-
-                let demographics_percent = demographics.map(d => 
-                  Object.assign(...Object.keys(d).map(key => 
-                    ({
-                      [key]: 
-                        keys.includes(key) 
-                        ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
-                        : d[key]
-                    })
-                  ))
-                );
-
-                return (
-                  <HorizontalStackedBar
-                    data={demographics_percent.reverse()}
-                    y={d => d.demographic_value}
-                    keys={keys}
-                    colors={[
-                      colors.turquoise.dark,
-                      colors.turquoise.medium,
-                      colors.red.light,
-                      colors.red.dark,
-                      colors.blue.light,
-                      colors.blue.very_light,
-                      colors.blue.light,
-                      colors.blue.light,
-                    ]}
-                    {...props}
-                  />
-                )
-              }}
+              {props => (
+                <HorizontalStackedBar
+                  data={demographics_percent}
+                  y={d => d.demographic_value}
+                  keys={keys}
+                  colors={[
+                    colors.turquoise.dark,
+                    colors.turquoise.medium,
+                    colors.red.light,
+                    colors.red.dark,
+                    colors.blue.light,
+                    colors.blue.very_light,
+                    colors.blue.light,
+                    colors.blue.light,
+                  ]}
+                  {...props}
+                />
+              )}
             </Chart>
           </div>
         )})}
