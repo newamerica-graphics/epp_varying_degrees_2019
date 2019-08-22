@@ -18,6 +18,7 @@ export default class Dashboard extends React.Component {
     this.data = this.props.data.data;
     this.comparison_demographic = this.props.data.meta[0].comparison_demographic;
     this.total_demographic = this.props.data.meta[0].demographic_key_for_total;
+    this.filtered_data_unavailable_text = this.props.data.meta[0].filtered_data_unavailable_text;
 
     /*
     This is the format for the new questions data object:
@@ -149,6 +150,7 @@ export default class Dashboard extends React.Component {
           let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics.filter(d => d.demographic_total > 0).reverse();
           demographics = data_is_filtered ? demographics.concat(q.total) : demographics;
           let number_of_bars = demographics.length;
+          let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
           let keys = Object.keys(demographics[0]).filter(key => 
             key != "demographic_value" 
@@ -170,6 +172,7 @@ export default class Dashboard extends React.Component {
           <div>
             {is_new_question && (<h2>{q.content_general}</h2> )}
             {q.content_specific && (<h3>{q.content_specific}</h3>)}
+            {filtered_data_unavailable && (<p>{this.filtered_data_unavailable_text}</p>)}
             <Chart
               maxWidth={650}
               height={(93 * number_of_bars) + 71}
