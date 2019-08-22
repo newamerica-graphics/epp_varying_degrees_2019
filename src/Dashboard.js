@@ -146,9 +146,10 @@ export default class Dashboard extends React.Component {
           let is_new_question = q.content_general != last_question;
           last_question = q.content_general; 
 
-          let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics.reverse();
+          let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics.filter(d => d.demographic_total > 0).reverse();
           demographics = data_is_filtered ? demographics.concat(q.total) : demographics;
-          
+          let number_of_bars = demographics.length;
+
           let keys = Object.keys(demographics[0]).filter(key => 
             key != "demographic_value" 
             && key != "demographic_total" 
@@ -164,13 +165,14 @@ export default class Dashboard extends React.Component {
               })
             ))
           );
+
           return (
           <div>
             {is_new_question && (<h2>{q.content_general}</h2> )}
             {q.content_specific && (<h3>{q.content_specific}</h3>)}
             <Chart
               maxWidth={650}
-              height={350}
+              height={(93 * number_of_bars) + 71}
               renderTooltip={({ datum }) => (
                 <div style={{ display: "flex" }}>
                   <strong style={{ marginRight: "0.7em" }}>{datum.key}</strong>
