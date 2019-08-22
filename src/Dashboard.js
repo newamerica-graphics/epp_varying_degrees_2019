@@ -199,6 +199,13 @@ export default class Dashboard extends React.Component {
                 />
               )}
             </Chart>
+            <small>
+              {data_is_filtered
+              ? (<span>n = {q.total[0].demographic_total}</span>)
+              : demographics
+                .map(d => (<span><strong>{d.demographic_value}</strong> n = {d.demographic_total} </span>))
+              }
+            </small>
           </div>
         )})}
       </ChartContainer>
