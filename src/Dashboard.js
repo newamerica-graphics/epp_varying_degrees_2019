@@ -2,7 +2,7 @@ import React from "react";
 import { Chart, HorizontalStackedBar } from "@newamerica/charts";
 import { ButtonGroup, Select } from "@newamerica/components";
 import { ChartContainer } from "@newamerica/meta";
-import { colors } from "./lib/colors";
+import { colorsets } from "./lib/colorsets";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -50,13 +50,14 @@ export default class Dashboard extends React.Component {
     this.questions = this.props.data.questions
     .map(q => {
       let q_data = this.data.filter(d => 
-        d["Q Number"] == q.question_number 
+        d["Q Number"] == q.number_specific 
       );
       return ({
-        question_number: q.question,
-        question_specific: q.question_number,
+        question_number: q.number_general,
+        question_specific: q.number_specific,
         content_general: q.content_general,
         content_specific: q.content_specific,
+        colorset: q.colorset,
         total: [
           Object.assign(
             {
@@ -118,13 +119,13 @@ export default class Dashboard extends React.Component {
 
     let data_is_filtered = filter_demographic != this.total_demographic;
     let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
-    let question_group = this.props.data.question_groups
+    let finding_questions = this.props.data.finding_questions
       .filter(d => d.finding == filter_finding)
       .map(finding_question => finding_question.question_number);
     let questions = this.questions
       .filter(q => 
-        question_group.includes(q.question_number)
-        || question_group.includes(q.question_specific)
+        finding_questions.includes(q.question_number)
+        || finding_questions.includes(q.question_specific)
       );
     let last_question;
       
@@ -156,6 +157,7 @@ export default class Dashboard extends React.Component {
             key != "demographic_value" 
             && key != "demographic_total" 
           );
+          let colorset = q.colorset ? colorsets[q.colorset] : colorsets.unordered;
 
           let demographics_percent = demographics.map(d => 
             Object.assign(...Object.keys(d).map(key => 
@@ -188,16 +190,7 @@ export default class Dashboard extends React.Component {
                   data={demographics_percent}
                   y={d => d.demographic_value}
                   keys={keys}
-                  colors={[
-                    colors.turquoise.dark,
-                    colors.turquoise.medium,
-                    colors.red.light,
-                    colors.red.dark,
-                    colors.blue.light,
-                    colors.blue.very_light,
-                    colors.blue.light,
-                    colors.blue.light,
-                  ]}
+                  colors={colorset.slice(0, keys.length - 3).concat(colorsets.base)}
                   {...props}
                 />
               )}
