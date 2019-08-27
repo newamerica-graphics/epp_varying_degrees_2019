@@ -27,12 +27,17 @@ const colorsets = {
     colors.red.light,
     colors.red.dark,
   ],
-  scale: [
-    colors.grey.dark,
+  scale_decreasing: [
     colors.turquoise.dark,
     colors.turquoise.medium,
     colors.turquoise.light,
     colors.turquoise.very_light,
+  ],
+  scale_increasing: [
+    colors.turquoise.very_light,
+    colors.turquoise.light,
+    colors.turquoise.medium,
+    colors.turquoise.dark,
   ],
   boolean: [
     colors.turquoise.medium,
