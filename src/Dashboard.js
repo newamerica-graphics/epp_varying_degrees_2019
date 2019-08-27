@@ -122,13 +122,14 @@ export default class Dashboard extends React.Component {
     return (
       <ChartContainer className="dv-chart">
         <div className="dv-chart__column">
-          <p>
-            Filter by 
+          <div class="filter">
+            <label className="filter__label">Filter by</label>
             <Select
               onChange={this.handleFilterDemographicChange}
               options={this.props.data.demographic_keys.map(d => d.demographic_key)}
+              className="filter__select"
             />
-          </p>
+          </div>
           <ButtonGroup
             onChange={this.handleFilterFindingChange}
             options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
