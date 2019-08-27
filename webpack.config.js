@@ -22,7 +22,8 @@ module.exports = env => {
       new HtmlWebpackPlugin({
         title: "EPP Varying Degrees 2019",
         chartIDs: [
-          "test"
+          "dashboard",
+          "individual_test",
         ],
         inject: false,
         template: path.resolve(__dirname, "src/index.html")

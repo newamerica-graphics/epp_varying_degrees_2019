@@ -49,8 +49,8 @@ export default class CustomChart extends React.Component {
     );
 
     return (
-      <div>
-        {this.display_full_question && 
+      <div className={this.props.individual && "chart--individual"}>
+        {(this.display_full_question || this.props.individual) && 
           <h2>{this.question.content_general}</h2>
         }
         {this.question.content_specific &&
@@ -86,6 +86,7 @@ export default class CustomChart extends React.Component {
             .map(d => (<span><strong>{d.demographic_value}</strong> n = {d.demographic_total} </span>))
           }
         </small>
+        {this.props.individual && <h4>NEW AMERICA</h4>}
       </div>
     );
   }
