@@ -1,8 +1,7 @@
 import React from "react";
-import { Chart, HorizontalStackedBar } from "@newamerica/charts";
 import { ButtonGroup, Select } from "@newamerica/components";
 import { ChartContainer } from "@newamerica/meta";
-import { colorsets } from "./lib/colorsets";
+import CustomChart from "./CustomChart";
 
 export default class Dashboard extends React.Component {
   constructor(props) {
@@ -114,19 +113,10 @@ export default class Dashboard extends React.Component {
   }
 
   render() {
-    const filter_demographic = this.state.filter_demographic;
-    const filter_finding = this.state.filter_finding;
-
-    let data_is_filtered = filter_demographic != this.total_demographic;
-    let selected_finding = this.props.data.findings.find(d => d.finding_short == filter_finding);
+    let selected_finding = this.props.data.findings.find(d => d.finding_short == this.state.filter_finding);
     let finding_questions = this.props.data.finding_questions
-      .filter(d => d.finding == filter_finding)
+      .filter(d => d.finding == this.state.filter_finding)
       .map(finding_question => finding_question.question_number);
-    let questions = this.questions
-      .filter(q => 
-        finding_questions.includes(q.question_number)
-        || finding_questions.includes(q.question_specific)
-      );
     let last_question;
       
     return (
@@ -147,66 +137,24 @@ export default class Dashboard extends React.Component {
         </div>
         <div className="dv-chart__column">
           <h1>{selected_finding.finding_title}</h1>
-          {questions.map((q) => {
+          {this.questions.map((q) => {
             let is_new_question = q.content_general != last_question;
             last_question = q.content_general; 
 
-            let demographics = q.demographic_keys.find(d => d.demographic_key == filter_demographic).demographics.filter(d => d.demographic_total > 0).reverse();
-            demographics = data_is_filtered ? demographics.concat(q.total) : demographics;
-            let number_of_bars = demographics.length;
-            let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
-
-            let keys = Object.keys(demographics[0]).filter(key => 
-              key != "demographic_value" 
-              && key != "demographic_total" 
-            );
-            let colorset = q.colorset ? colorsets[q.colorset] : colorsets.unordered;
-
-            let demographics_percent = demographics.map(d => 
-              Object.assign(...Object.keys(d).map(key => 
-                ({
-                  [key]: 
-                    keys.includes(key) 
-                    ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
-                    : d[key]
-                })
-              ))
-            );
-
             return (
-            <div>
-              {is_new_question && (<h2>{q.content_general}</h2> )}
-              {q.content_specific && (<h3>{q.content_specific}</h3>)}
-              {filtered_data_unavailable && (<p>{this.filtered_data_unavailable_text}</p>)}
-              <Chart
-                maxWidth={650}
-                height={(93 * number_of_bars) + 71}
-                renderTooltip={({ datum }) => (
-                  <div style={{ display: "flex" }}>
-                    <strong style={{ marginRight: "0.7em" }}>{datum.key}</strong>
-                    <span>{(datum.bar.data[datum.key] < 1 && datum.bar.data[datum.key]) > 0 ? "<1" : Math.round(datum.bar.data[datum.key])}%</span>
-                  </div>
-                )}
-              >
-                {props => (
-                  <HorizontalStackedBar
-                    data={demographics_percent}
-                    y={d => d.demographic_value}
-                    keys={keys}
-                    colors={colorset.slice(0, keys.length - 3).concat(colorsets.base)}
-                    {...props}
+              <div>
+                {(finding_questions.includes(q.question_number) || finding_questions.includes(q.question_specific)) && 
+                  <CustomChart
+                    question={q}
+                    display_full_question={is_new_question}
+                    filter_demographic={this.state.filter_demographic}
+                    total_demographic={this.total_demographic}
+                    onFilterDemographicChange={this.handleFilterDemographicChange}
                   />
-                )}
-              </Chart>
-              <small>
-                {data_is_filtered
-                ? (<span>n = {q.total[0].demographic_total}</span>)
-                : demographics
-                  .map(d => (<span><strong>{d.demographic_value}</strong> n = {d.demographic_total} </span>))
                 }
-              </small>
-            </div>
-          )})}
+              </div>
+            )
+          })}
         </div>
       </ChartContainer>
     );
