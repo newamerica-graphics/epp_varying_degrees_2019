@@ -51,7 +51,23 @@ export default class CustomChart extends React.Component {
     return (
       <div>
         {this.display_full_question && 
-          <h2>{this.question.content_general}</h2>
+          <div>
+            <h2>{this.question.content_general}</h2>
+            <ul className="legend">
+              {keys.map((key, i) => {
+                let color = colorset.slice(0, keys.length - 3).concat(colorsets.base)[i];
+                return (
+                  i < keys.length - 3 &&
+                  <li 
+                  className="legend__item"
+                  style={{borderColor: color, backgroundColor: color}}
+                  >
+                    {key}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         }
         {this.question.content_specific &&
           <h3>{this.question.content_specific}</h3>
@@ -59,6 +75,21 @@ export default class CustomChart extends React.Component {
         {filtered_data_unavailable &&
           <p>{this.filtered_data_unavailable_text}</p>
         }
+
+        {/* Map out values */}
+        {/* <ul>
+          {demographics_percent.map(d => 
+            <li>
+              {d.demographic_value}
+              <ul>
+                {keys.map(key => 
+                  <li><strong>{key}</strong> {d[key]}</li>  
+                )}
+              </ul>
+            </li>
+          )}
+        </ul> */}
+
         <Chart
           maxWidth={650}
           height={(93 * number_of_bars) + 71}
