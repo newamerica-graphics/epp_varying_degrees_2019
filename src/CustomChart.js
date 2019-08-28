@@ -20,6 +20,7 @@ export default class CustomChart extends React.Component {
 
   render() {
     const filter_demographic = this.props.filter_demographic;
+    const number_of_nondemographic_keys = 2;
 
     let data_is_filtered = filter_demographic != this.total_demographic;
     let demographics = this.question.demographic_keys
@@ -31,11 +32,9 @@ export default class CustomChart extends React.Component {
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
-    let keys = Object.keys(demographics[0]).filter(key => 
-      key != "demographic_value" 
-      && key != "demographic_total" 
-    );
+    let keys = Object.keys(demographics[0]).slice(number_of_nondemographic_keys);
     let colorset = this.question.colorset ? colorsets[this.question.colorset] : colorsets.unordered;
+    colorset = colorset.slice(0, keys.length - 3).concat(colorsets.base);
 
     let demographics_percent = demographics.map(d => 
       Object.assign(...Object.keys(d).map(key => 
@@ -54,13 +53,11 @@ export default class CustomChart extends React.Component {
           <div>
             <h2>{this.question.content_general}</h2>
             <ul className="legend">
-              {keys.map((key, i) => {
-                let color = colorset.slice(0, keys.length - 3).concat(colorsets.base)[i];
+              {keys.slice(0, keys.length - 3).map((key, i) => {
                 return (
-                  i < keys.length - 3 &&
                   <li 
                   className="legend__item"
-                  style={{borderColor: color, backgroundColor: color}}
+                  style={{borderColor: colorset[i], backgroundColor: colorset[i]}}
                   >
                     {key}
                   </li>
@@ -76,27 +73,31 @@ export default class CustomChart extends React.Component {
           <p>{this.filtered_data_unavailable_text}</p>
         }
 
-        {/* Map out values */}
-        {/* <ul>
-          {demographics_percent.map(d => 
-            <li>
-              {d.demographic_value}
-              <ul>
-                {keys.map(key => 
-                  <li><strong>{key}</strong> {d[key]}</li>  
-                )}
-              </ul>
-            </li>
-          )}
-        </ul> */}
-
         <Chart
-          maxWidth={650}
-          height={(93 * number_of_bars) + 71}
+          maxWidth={650 + 20}
+          height={(50 * number_of_bars) + 45}
           renderTooltip={({ datum }) => (
-            <div style={{ display: "flex" }}>
-              <strong style={{ marginRight: "0.7em" }}>{datum.key}</strong>
-              <span>{(datum.bar.data[datum.key] < 1 && datum.bar.data[datum.key]) > 0 ? "<1" : Math.round(datum.bar.data[datum.key])}%</span>
+            <div>
+              {/* <h4>{datum.bar.y}</h4> */}
+              <table className="tooltip-table">
+                {keys.map((key, i) => {
+                  let is_positive =  datum.bar.data[key] > 0;
+                  return (
+                    <tr 
+                    className={"tooltip-table__tr " + (is_positive ? "" : "tooltip-table__tr--zero-value")}
+                    style={is_positive ? {borderColor: colorset[i], backgroundColor: colorset[i]} : {}}
+                    >
+                      <td className="tooltip-table__td tooltip-table__td--datum">
+                        {(is_positive && datum.bar.data[key] < 1) 
+                          ? "<1" 
+                          : Math.round(datum.bar.data[key])}
+                        %
+                      </td>
+                      <td className="tooltip-table__td tooltip-table__td--key">{key}</td>
+                    </tr>
+                  );
+                })}
+              </table>
             </div>
           )}
         >
@@ -105,18 +106,20 @@ export default class CustomChart extends React.Component {
               data={demographics_percent}
               y={d => d.demographic_value}
               keys={keys}
-              colors={colorset.slice(0, keys.length - 3).concat(colorsets.base)}
+              colors={colorset}
+              margin={{ top: 20, left: 120, right: 20, bottom: 25 }}
               {...props}
             />
           )}
         </Chart>
-        <small>
-          {data_is_filtered
-          ? (<span>n = {this.question.total[0].demographic_total}</span>)
-          : demographics
-            .map(d => (<span><strong>{d.demographic_value}</strong> n = {d.demographic_total} </span>))
-          }
-        </small>
+          <small className="n-value">
+            {(data_is_filtered || number_of_bars == 1)
+              ? (<span>n = {this.question.total[0].demographic_total}</span>)
+              : demographics.map(d => (
+                <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
+              ))
+            }
+          </small>
       </div>
     );
   }
