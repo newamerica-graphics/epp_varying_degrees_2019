@@ -49,10 +49,10 @@ export default class CustomChart extends React.Component {
     );
 
     return (
-      <div className={this.props.individual && "chart--individual"}>
+      <div className={`chart ${this.props.individual && "chart--individual"}`}>
         {(this.display_full_question || this.props.individual) && 
           <div>
-            <h2>{this.question.content_general}</h2>
+            <h3 className="chart__title">{this.question.content_general}</h3>
             <ul className="legend">
               {keys.slice(0, keys.length - 3).map((key, i) => {
                 return (
@@ -68,24 +68,24 @@ export default class CustomChart extends React.Component {
           </div>
         }
         {this.question.content_specific &&
-          <h3>{this.question.content_specific}</h3>
+          <h4 className="chart__title chart__title--specific">{this.question.content_specific}</h4>
         }
         {filtered_data_unavailable &&
-          <p>{this.filtered_data_unavailable_text}</p>
+          <p>{this.filtered_data_unavailable_text}</p> // TODO this isn't showing
         }
 
         <Chart
-          maxWidth={650 + 20}
-          height={(50 * number_of_bars) + 45}
+          maxWidth={650}
+          height={(50 * number_of_bars) + 10}
           renderTooltip={({ datum }) => (
             <div>
-              {/* <h4>{datum.bar.y}</h4> */}
+              <h4 className="tooltip__title">{datum.bar.data.demographic_value}</h4>
               <table className="tooltip-table">
                 {keys.map((key, i) => {
                   let is_positive =  datum.bar.data[key] > 0;
                   return (
                     <tr 
-                    className={"tooltip-table__tr " + (is_positive ? "" : "tooltip-table__tr--zero-value")}
+                    className={`tooltip-table__tr ${(!is_positive && "tooltip-table__tr--zero-value")} ${(datum.key == key && "tooltip-table__tr--active")}`}
                     style={is_positive ? {borderColor: colorset[i], backgroundColor: colorset[i]} : {}}
                     >
                       <td className="tooltip-table__td tooltip-table__td--datum">
@@ -108,7 +108,7 @@ export default class CustomChart extends React.Component {
               y={d => d.demographic_value}
               keys={keys}
               colors={colorset}
-              margin={{ top: 20, left: 120, right: 20, bottom: 25 }}
+              margin={{ top: data_is_filtered ? 10 : 0, left: data_is_filtered ? 120 : 60, right: 0, bottom: 0 }}
               {...props}
             />
           )}
@@ -121,7 +121,7 @@ export default class CustomChart extends React.Component {
             ))
           }
         </small>
-        {this.props.individual && <h4>NEW AMERICA</h4>}
+        {this.props.individual && <h4 className="logo-text">New America</h4>}
       </div>
     );
   }

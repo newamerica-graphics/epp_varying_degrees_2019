@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { BarStackHorizontal } from "@vx/shape";
+import { BarStackHorizontal, Line } from "@vx/shape";
 import { Group } from "@vx/group";
 import { AxisBottom, AxisLeft } from "@vx/axis";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@vx/scale";
-import { GridColumns } from "@vx/grid";
+import { GridColumns, GridRows } from "@vx/grid";
+import { Text } from "@vx/text";
 import { max } from "d3-array";
 
 const HorizontalStackedBar = ({
@@ -32,6 +33,7 @@ const HorizontalStackedBar = ({
     return acc;
   }, []);
 
+  const total_bar_offset = 8;
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
@@ -54,10 +56,19 @@ const HorizontalStackedBar = ({
     <Group top={margin.top} left={margin.left}>
       <GridColumns
         scale={xScale}
-        height={yMax}
-        numTicks={
-          typeof numTicksX === "function" ? numTicksX(width) : numTicksX
-        }
+        height={yMax + total_bar_offset}
+        top={- total_bar_offset}
+        tickValues={[25, 75]}
+        stroke="#ABACAE"
+        />
+      <GridColumns
+        scale={xScale}
+        height={yMax + total_bar_offset}
+        top={- total_bar_offset}
+        tickValues={[50]}
+        lineStyle={{strokeOpacity: "0.5"}}
+        stroke="#333"
+        strokeWidth="2px"
       />
       <BarStackHorizontal
         data={data}
@@ -70,57 +81,61 @@ const HorizontalStackedBar = ({
       >
         {barStacks => {
           return barStacks.map(barStack =>
-            barStack.bars.map(bar => (
-              <rect
-                key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                x={bar.x}
-                y={bar.y}
-                width={bar.width}
-                height={bar.height}
-                fill={bar.color}
-                onMouseLeave={handleMouseLeave ? handleMouseLeave : null}
-                onMouseMove={event =>
-                  handleMouseMove
-                    ? handleMouseMove({ event, data, datum: bar })
-                    : null
-                }
-              />
-            ))
+            <Group className="bar-stack">
+              {barStack.bars.map(bar => (
+                <Group 
+                  className={`
+                    bar
+                    bar--demographic-${bar.bar.data.demographic_value.replace(/\s+/g, '-').toLowerCase()} 
+                    bar--key-${bar.key.replace(/\s+/g, '-') .toLowerCase()}
+                  `}
+                  key={`barstack-horizontal-${barStack.index}-${bar.index}`}
+                >
+                  <rect
+                    className="bar__rectangle"
+                    x={bar.x}
+                    y={bar.bar.data.demographic_value == "Total" ? bar.y - total_bar_offset : bar.y}
+                    width={bar.width}
+                    height={bar.height}
+                    fill={bar.color}
+                    onMouseLeave={handleMouseLeave ? handleMouseLeave : null}
+                    onMouseMove={event =>
+                      handleMouseMove
+                        ? handleMouseMove({ event, data, datum: bar })
+                        : null
+                    }
+                  />
+                  <Text
+                    x={bar.x + 5}
+                    y={bar.y + 0.5 * bar.height - (bar.bar.data.demographic_value == "Total" ? total_bar_offset : 0)}
+                    className={`bar__text bar__text--color-`+bar.color.slice(1)}
+                    verticalAnchor="middle"
+                  >
+                    {bar.bar.data[bar.key] >= 6.5 
+                      && Math.round(bar.bar.data[bar.key])
+                      + `%`
+                    }
+                  </Text>
+                </Group>
+              ))}
+            </Group>
           );
         }}
       </BarStackHorizontal>
       <AxisLeft
         scale={yScale}
-        hideAxisLine={false}
-        hideTicks={false}
+        hideAxisLine={true}
+        hideTicks={true}
         tickFormat={yFormat}
         label={yAxisLabel}
-        tickLabelProps={() => ({
+        tickLabelProps={(d) => ({
           width: margin.left,
           textAnchor: "end",
           verticalAnchor: "middle",
-          dx: "-0.3em"
+          fontSize: 14,
+          fontWeight: (d == "2019" || d == "Total") && "bold", // TODO don't hard-code this text
+          dy: d == "Total" && - total_bar_offset
         })}
-      />
-      <AxisBottom
-        scale={xScale}
-        top={yMax}
-        hideAxisLine={true}
-        hideTicks={true}
-        numTicks={
-          typeof numTicksX === "function" ? numTicksX(width) : numTicksX
-        }
-        tickFormat={xFormat}
-        tickLabelProps={() => ({
-          textAnchor: "middle",
-          verticalAnchor: "end"
-        })}
-        label={xAxisLabel}
-        labelProps={{
-          dy: "2.5em",
-          textAnchor: "middle",
-          verticalAnchor: "start"
-        }}
       />
     </Group>
   );

@@ -54,7 +54,7 @@ export default class Dashboard extends React.Component {
           />
         </div>
         <div className="dv-chart__column">
-          <h1>{selected_finding.finding_title}</h1>
+          <h2>{selected_finding.finding_title}</h2>
           {this.questions.map((q) => {
             let is_new_question = q.content_general != last_question;
             last_question = q.content_general; 
