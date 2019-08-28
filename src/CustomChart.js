@@ -1,5 +1,6 @@
 import React from "react";
-import { Chart, HorizontalStackedBar } from "@newamerica/charts";
+import { Chart } from "@newamerica/charts";
+import HorizontalStackedBar from "./HorizontalStackedBar";
 import { colorsets } from "./lib/colorsets";
 
 export default class CustomChart extends React.Component {
