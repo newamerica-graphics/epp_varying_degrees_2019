@@ -1,5 +1,8 @@
 @import lib/select
 
+.na-dataviz
+	margin-bottom: 1rem
+	
 .dv-btn-group
 	display: flex
 	flex-direction: column
@@ -28,13 +31,17 @@
 		&:hover, &:focus, &:active
 			background-color: rgba(#333, 0.8)
 
+.chart
+	&--individual
+		background-color: #efefef
+		padding: 1rem
+
 .dv-chart
-	margin-bottom: 2rem
 	display: grid
 	grid-gap: 2rem
 
 	@media screen and ( min-width: 800px )
-		height: calc(100vh - 120px)
+		height: calc(100vh - 4rem)
 		grid-template-columns: 1fr 2fr
 		
 		&__column

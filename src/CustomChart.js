@@ -48,8 +48,8 @@ export default class CustomChart extends React.Component {
     );
 
     return (
-      <div>
-        {this.display_full_question && 
+      <div className={this.props.individual && "chart--individual"}>
+        {(this.display_full_question || this.props.individual) && 
           <div>
             <h2>{this.question.content_general}</h2>
             <ul className="legend">
@@ -112,14 +112,15 @@ export default class CustomChart extends React.Component {
             />
           )}
         </Chart>
-          <small className="n-value">
-            {(data_is_filtered || number_of_bars == 1)
-              ? (<span>n = {this.question.total[0].demographic_total}</span>)
-              : demographics.map(d => (
-                <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
-              ))
-            }
-          </small>
+        <small className="n-value">
+          {(data_is_filtered || number_of_bars == 1)
+            ? (<span>n = {this.question.total[0].demographic_total}</span>)
+            : demographics.map(d => (
+              <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
+            ))
+          }
+        </small>
+        {this.props.individual && <h4>NEW AMERICA</h4>}
       </div>
     );
   }
