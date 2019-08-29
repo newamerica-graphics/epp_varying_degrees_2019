@@ -11,6 +11,7 @@ export default class CustomChart extends React.Component {
     this.display_full_question = this.props.display_full_question;
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
+    this.number_of_nondemographic_keys = 2;
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
   }
@@ -21,9 +22,10 @@ export default class CustomChart extends React.Component {
 
   render() {
     const filter_demographic = this.props.filter_demographic;
-    const number_of_nondemographic_keys = 2;
 
     let data_is_filtered = filter_demographic != this.total_demographic;
+    let margin_left = data_is_filtered ? 120 : 60;
+
     let demographics = this.question.demographic_keys
       .find(d => d.demographic_key == filter_demographic)
       .demographics
@@ -33,7 +35,7 @@ export default class CustomChart extends React.Component {
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
-    let keys = Object.keys(demographics[0]).slice(number_of_nondemographic_keys);
+    let keys = Object.keys(demographics[0]).slice(this.number_of_nondemographic_keys);
     let colorset = this.question.colorset ? colorsets[this.question.colorset] : colorsets.unordered;
     colorset = colorset.slice(0, keys.length - 3).concat(colorsets.base);
 
@@ -71,11 +73,11 @@ export default class CustomChart extends React.Component {
           <h4 className="chart__title chart__title--specific">{this.question.content_specific}</h4>
         }
         {filtered_data_unavailable &&
-          <p>{this.filtered_data_unavailable_text}</p> // TODO this isn't showing
+          <p class="chart__message">{this.filtered_data_unavailable_text}</p>
         }
 
         <Chart
-          maxWidth={650}
+          maxWidth={758}
           height={(50 * number_of_bars) + 10}
           renderTooltip={({ datum }) => (
             <div>
@@ -108,12 +110,12 @@ export default class CustomChart extends React.Component {
               y={d => d.demographic_value}
               keys={keys}
               colors={colorset}
-              margin={{ top: data_is_filtered ? 10 : 0, left: data_is_filtered ? 120 : 60, right: 0, bottom: 0 }}
+              margin={{ top: data_is_filtered ? 10 : 0, left: margin_left, right: 0, bottom: 0 }}
               {...props}
             />
           )}
         </Chart>
-        <small className="n-value">
+        <small className="n-value" style={{marginLeft: margin_left}}>
           {(data_is_filtered || number_of_bars == 1)
             ? (<span>n = {this.question.total[0].demographic_total}</span>)
             : demographics.map(d => (

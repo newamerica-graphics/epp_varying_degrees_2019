@@ -14,11 +14,14 @@ export default class Dashboard extends React.Component {
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleFilterFindingChange = this.handleFilterFindingChange.bind(this);
 
-    this.data=this.props.data
-    this.questions=this.props.questions
-    this.comparison_demographic=this.props.comparison_demographic
-    this.total_demographic=this.props.total_demographic
-    this.filtered_data_unavailable_text=this.props.filtered_data_unavailable_text
+    this.data = this.props.data;
+    this.meta = this.data.meta[0];
+    this.questions = this.props.questions;
+    this.comparison_demographic = this.props.comparison_demographic;
+    this.total_demographic = this.props.total_demographic;
+    this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
+    this.filter_heading = this.meta.filter_heading;
+    this.findings_heading = this.meta.findings_heading;
   }
 
   handleFilterDemographicChange(demographic) {
@@ -39,19 +42,22 @@ export default class Dashboard extends React.Component {
     return (
       <ChartContainer className="dv-chart">
         <div className="dv-chart__column">
-          <div class="filter">
-            <label className="filter__label">Filter by</label>
+          <nav className="dashboard-nav">
+            <label>
+              <h4 className="dashboard-nav__heading dashboard-nav__heading--first">{this.filter_heading}</h4>
+            </label>
             <Select
               onChange={this.handleFilterDemographicChange}
               options={this.props.data.demographic_keys.map(d => d.demographic_key)}
-              className="filter__select"
+              className="dashboard-nav__select"
             />
-          </div>
-          <ButtonGroup
-            onChange={this.handleFilterFindingChange}
-            options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
-            active={this.props.data.findings[0].finding_short}
-          />
+            <h4 className="dashboard-nav__heading">{this.findings_heading}</h4>
+            <ButtonGroup
+              onChange={this.handleFilterFindingChange}
+              options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
+              active={this.props.data.findings[0].finding_short}
+            />
+          </nav>
         </div>
         <div className="dv-chart__column">
           <h2>{selected_finding.finding_title}</h2>
@@ -67,6 +73,7 @@ export default class Dashboard extends React.Component {
                     display_full_question={is_new_question}
                     filter_demographic={this.state.filter_demographic}
                     total_demographic={this.total_demographic}
+                    filtered_data_unavailable_text={this.filtered_data_unavailable_text}
                     onFilterDemographicChange={this.handleFilterDemographicChange}
                   />
                 }

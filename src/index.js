@@ -33,6 +33,7 @@ const settings = {
           question={questions.find(d => d.question_specific == "2B")}
           filter_demographic="Education"
           total_demographic="Total"
+          filtered_data_unavailable_text={filtered_data_unavailable_text}
           individual={true}
         />
       ],
