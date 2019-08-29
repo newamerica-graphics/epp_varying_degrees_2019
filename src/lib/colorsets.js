@@ -4,8 +4,8 @@ import { colors } from "./colors";
 const colorsets = {
   base: [
     colors.grey.light,
-    "transparent",
-    "transparent",
+    colors.white,
+    colors.white,
   ],
   diverging: {
     positive: [
@@ -21,16 +21,16 @@ const colorsets = {
     ],
   },
   scale_decreasing: [
-    colors.turquoise.dark,
     colors.turquoise.medium,
     colors.turquoise.light,
+    colors.turquoise.very_light_2,
     colors.turquoise.very_light,
   ],
   scale_increasing: [
     colors.turquoise.very_light,
+    colors.turquoise.very_light_2,
     colors.turquoise.light,
     colors.turquoise.medium,
-    colors.turquoise.dark,
   ],
   boolean: [
     colors.turquoise.light,
