@@ -11,7 +11,8 @@ export default class CustomChart extends React.Component {
     this.display_full_question = this.props.display_full_question;
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
-    this.number_of_nondemographic_keys = 2;
+    this.number_of_meta_keys = 2; // demographic_value and demographic_total
+    this.number_of_nonanswers = 3 // "DON'T KNOW", "SKIPPED ON WEB", "REFUSED" // TODO don't hard code
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
   }
@@ -35,15 +36,51 @@ export default class CustomChart extends React.Component {
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
-    let keys = Object.keys(demographics[0]).slice(this.number_of_nondemographic_keys);
-    let colorset = this.question.colorset ? colorsets[this.question.colorset] : colorsets.unordered;
-    colorset = colorset.slice(0, keys.length - 3).concat(colorsets.base);
+    let keys = Object.keys(demographics[0]).slice(this.number_of_meta_keys);
+    let chart_keys = keys;
+
+    let number_of_keys = keys.length;
+    let number_of_nonanswers = this.number_of_nonanswers;
+    let number_of_answers = number_of_keys - number_of_nonanswers;
+    
+    let colorset_name = this.question.colorset;
+    let { colorset, legend_keys, legend_colorset, chart_colorset, positive_answers, neutral_answers, negative_answers } = [];
+    let nonanswers = keys.slice(number_of_answers);
+    
+    if (colorset_name.includes("diverging")) {
+      colorset = colorsets["diverging"];
+      if ( colorset_name == "diverging" ) {
+        legend_colorset = colorset.positive.concat(colorset.negative);
+        chart_colorset = colorset.positive.concat(colorsets.base, colorset.negative);
+        positive_answers = keys.slice(0, number_of_answers / 2);
+        negative_answers = keys.slice(number_of_answers / 2, number_of_answers);
+      } else if ( colorset_name == "diverging_neutral_center" || colorset_name == "diverging_neutral_last" ) {
+        legend_colorset = Object.values(colorset).flat();
+        chart_colorset = colorset.positive.concat(colorset.neutral, colorsets.base, colorset.negative);
+        positive_answers = keys.slice(0, (number_of_answers - 1) / 2);
+        if ( colorset_name == "diverging_neutral_center" ) {
+          neutral_answers = keys.slice((number_of_answers - 1) / 2, (number_of_answers + 1) / 2);
+          negative_answers = keys.slice((number_of_answers + 1) / 2, number_of_answers);
+        } else if (colorset_name == "diverging_neutral_last") {
+          negative_answers = keys.slice((number_of_answers - 1) / 2, number_of_answers - 1);
+          neutral_answers = keys.slice(number_of_answers - 1, number_of_answers);
+        }
+      }
+      let positive_neutral = neutral_answers ? positive_answers.concat(neutral_answers) : positive_answers;
+      legend_keys = positive_neutral.concat(negative_answers);
+      chart_keys = positive_neutral.concat(nonanswers, negative_answers);
+    } else {
+      colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
+      legend_colorset = colorset.slice(0, number_of_answers);
+      chart_colorset = legend_colorset.concat(colorsets.base);
+      legend_keys = keys.slice(0, number_of_answers);
+    } 
 
     let demographics_percent = demographics.map(d => 
       Object.assign(...Object.keys(d).map(key => 
         ({
           [key]: 
-            keys.includes(key) 
+            chart_keys.includes(key) 
             ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
             : d[key]
         })
@@ -56,11 +93,11 @@ export default class CustomChart extends React.Component {
           <div>
             <h3 className="chart__title">{this.question.content_general}</h3>
             <ul className="legend">
-              {keys.slice(0, keys.length - 3).map((key, i) => {
+              {legend_keys.map((key, i) => {
                 return (
                   <li 
                   className="legend__item"
-                  style={{borderColor: colorset[i], backgroundColor: colorset[i]}}
+                  style={{borderColor: legend_colorset[i], backgroundColor: legend_colorset[i]}}
                   >
                     {key}
                   </li>
@@ -83,12 +120,12 @@ export default class CustomChart extends React.Component {
             <div>
               <h4 className="tooltip__title">{datum.bar.data.demographic_value}</h4>
               <table className="tooltip-table">
-                {keys.map((key, i) => {
+                {chart_keys.map((key, i) => {
                   let is_positive =  datum.bar.data[key] > 0;
                   return (
                     <tr 
                     className={`tooltip-table__tr ${(!is_positive && "tooltip-table__tr--zero-value")} ${(datum.key == key && "tooltip-table__tr--active")}`}
-                    style={is_positive ? {borderColor: colorset[i], backgroundColor: colorset[i]} : {}}
+                    style={is_positive ? {borderColor: chart_colorset[i], backgroundColor: chart_colorset[i]} : {}}
                     >
                       <td className="tooltip-table__td tooltip-table__td--datum">
                         {(is_positive && datum.bar.data[key] < 1) 
@@ -108,8 +145,8 @@ export default class CustomChart extends React.Component {
             <HorizontalStackedBar
               data={demographics_percent}
               y={d => d.demographic_value}
-              keys={keys}
-              colors={colorset}
+              keys={chart_keys}
+              colors={chart_colorset}
               margin={{ top: data_is_filtered ? 10 : 0, left: margin_left, right: 0, bottom: 0 }}
               {...props}
             />

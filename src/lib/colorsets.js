@@ -3,30 +3,23 @@ import { colors } from "./colors";
 
 const colorsets = {
   base: [
-    colors.grey.medium,
-    colors.grey.medium,
-    colors.grey.medium,
+    colors.grey.light,
+    "transparent",
+    "transparent",
   ],
-  diverging: [
-    colors.turquoise.medium,
-    colors.turquoise.light,
-    colors.red.light,
-    colors.red.medium,
-  ],
-  diverging_neutral_last: [
-    colors.turquoise.medium,
-    colors.turquoise.light,
-    colors.red.light,
-    colors.red.medium,
-    colors.grey.medium_light,
-  ],
-  diverging_neutral_center: [
-    colors.turquoise.medium,
-    colors.turquoise.light,
-    colors.grey.medium_light,
-    colors.red.light,
-    colors.red.medium,
-  ],
+  diverging: {
+    positive: [
+      colors.turquoise.medium,
+      colors.turquoise.light,
+    ],
+    neutral: [
+      colors.grey.medium_light,
+    ],
+    negative: [
+      colors.red.light,
+      colors.red.medium,
+    ],
+  },
   scale_decreasing: [
     colors.turquoise.dark,
     colors.turquoise.medium,
