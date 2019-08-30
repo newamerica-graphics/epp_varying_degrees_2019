@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Dashboard from "./Dashboard";
-import CustomChart from "./CustomChart";
+import IndividualChart from "./IndividualChart";
 import './index.sass';
 
 let queue = [];
@@ -26,15 +26,53 @@ const settings = {
       el
     )
   },
-  'individual_test': el => {
+  'figure1': el => {
     ReactDOM.render(
       [
-        <CustomChart
-          question={questions.find(d => d.question_specific == "2B")}
-          filter_demographic="Education"
-          total_demographic="Total"
+        <IndividualChart
+          questions={questions.filter(d => d.number_general == "1")}
+          filter_demographic="Race"
+          total_demographic={total_demographic}
           filtered_data_unavailable_text={filtered_data_unavailable_text}
-          individual={true}
+        />
+      ],
+      el
+    )
+  },
+  'figure2': el => {
+    ReactDOM.render(
+      [
+        <IndividualChart
+          questions={questions.filter(d => d.number_specific == "2A")}
+          filter_demographic="Education"
+          total_demographic={total_demographic}
+          filtered_data_unavailable_text={filtered_data_unavailable_text}
+        />
+      ],
+      el
+    )
+  },
+  'figure3': el => {
+    ReactDOM.render(
+      [
+        <IndividualChart
+          questions={questions.filter(d => d.number_general == "2")}
+          filter_demographic="Total"
+          total_demographic={total_demographic}
+          filtered_data_unavailable_text={filtered_data_unavailable_text}
+        />
+      ],
+      el
+    )
+  },
+  'figure4': el => {
+    ReactDOM.render(
+      [
+        <IndividualChart
+          questions={questions.filter(d => d.number_general == "4")}
+          filter_demographic="Total"
+          total_demographic={total_demographic}
+          filtered_data_unavailable_text={filtered_data_unavailable_text}
         />
       ],
       el
@@ -53,8 +91,8 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
       d["Q Number"] == q.number_specific 
     );
     return ({
-      question_number: q.number_general,
-      question_specific: q.number_specific,
+      number_general: q.number_general,
+      number_specific: q.number_specific,
       content_general: q.content_general,
       content_specific: q.content_specific,
       colorset: q.colorset,

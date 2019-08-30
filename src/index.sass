@@ -60,7 +60,7 @@ h1, h2, h3, h4, h5, h6
 				background: $background-color
 				cursor: inherit
 
-.dv-chart
+.dv-dashboard
 	display: grid
 	grid-gap: 2rem
 
@@ -74,12 +74,16 @@ h1, h2, h3, h4, h5, h6
 			overflow-y: scroll
 			padding-right: 1rem // TODO check size for scrollbars
 
-.chart
+.dv-individual-chart
+	background-color: $grey--chart-background
+	padding: 1.5rem
+	max-width: 650px
+
+.custom-chart
 	margin-top: 2rem
 
-	&--individual
-		background-color: $grey--chart-background
-		padding: 1rem
+	&--individual-chart,
+	&--partial-chart
 		margin-top: 0
 
 	&__title
@@ -96,7 +100,7 @@ h1, h2, h3, h4, h5, h6
 
 .legend
 	list-style: none
-	margin: 0 0 1rem
+	margin:  1rem 0
 	padding: 0
 
 	&__item

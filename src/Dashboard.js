@@ -40,8 +40,8 @@ export default class Dashboard extends React.Component {
     let last_question;
       
     return (
-      <ChartContainer className="dv-chart">
-        <div className="dv-chart__column">
+      <ChartContainer className="dv-dashboard">
+        <div className="dv-dashboard__column">
           <nav className="dashboard-nav">
             <label>
               <h4 className="dashboard-nav__heading dashboard-nav__heading--first">{this.filter_heading}</h4>
@@ -59,7 +59,7 @@ export default class Dashboard extends React.Component {
             />
           </nav>
         </div>
-        <div className="dv-chart__column">
+        <div className="dv-dashboard__column">
           <h2>{selected_finding.finding_title}</h2>
           {this.questions.map((q) => {
             let is_new_question = q.content_general != last_question;
@@ -67,7 +67,7 @@ export default class Dashboard extends React.Component {
 
             return (
               <div>
-                {(finding_questions.includes(q.question_number) || finding_questions.includes(q.question_specific)) && 
+                {(finding_questions.includes(q.number_general) || finding_questions.includes(q.number_specific)) && 
                   <CustomChart
                     question={q}
                     display_full_question={is_new_question}

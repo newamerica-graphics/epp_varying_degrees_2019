@@ -88,10 +88,10 @@ export default class CustomChart extends React.Component {
     );
 
     return (
-      <div className={`chart ${this.props.individual && "chart--individual"}`}>
-        {(this.display_full_question || this.props.individual) && 
+      <div className={`custom-chart ${this.props.className} ${!this.display_full_question && "custom-chart--partial-chart"}`}>
+        {this.display_full_question && 
           <div>
-            <h3 className="chart__title">{this.question.content_general}</h3>
+            <h3 className="custom-chart__title">{this.question.content_general}</h3>
             <ul className="legend">
               {legend_keys.map((key, i) => {
                 return (
@@ -107,10 +107,10 @@ export default class CustomChart extends React.Component {
           </div>
         }
         {this.question.content_specific &&
-          <h4 className="chart__title chart__title--specific">{this.question.content_specific}</h4>
+          <h4 className="custom-chart__title custom-chart__title--specific">{this.question.content_specific}</h4>
         }
         {filtered_data_unavailable &&
-          <p class="chart__message">{this.filtered_data_unavailable_text}</p>
+          <p class="custom-chart__message">{this.filtered_data_unavailable_text}</p>
         }
 
         <Chart
@@ -160,7 +160,6 @@ export default class CustomChart extends React.Component {
             ))
           }
         </small>
-        {this.props.individual && <h4 className="logo-text">New America</h4>}
       </div>
     );
   }

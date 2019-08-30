@@ -23,7 +23,10 @@ module.exports = env => {
         title: "EPP Varying Degrees 2019",
         chartIDs: [
           "dashboard",
-          "individual_test",
+          "figure1",
+          "figure2",
+          "figure3",
+          "figure4",
         ],
         inject: false,
         template: path.resolve(__dirname, "src/index.html")
