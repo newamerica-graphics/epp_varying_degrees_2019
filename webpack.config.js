@@ -3,6 +3,8 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 
+const numberOfCharts = 20;
+
 module.exports = env => {
   return {
     entry: ["./src/index.js"],
@@ -21,13 +23,12 @@ module.exports = env => {
       env.deploy === "development" && new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         title: "EPP Varying Degrees 2019",
-        chartIDs: [
-          "dashboard",
-          "figure1",
-          "figure2",
-          "figure3",
-          "figure4",
-        ],
+        chartIDs: 
+          ["dashboard"]
+          .concat(Array.from(
+            { length: numberOfCharts }, 
+            (_,i) => `chart__${i+1}`
+          )),
         inject: false,
         template: path.resolve(__dirname, "src/index.html")
       }),

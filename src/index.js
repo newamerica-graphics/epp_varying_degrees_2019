@@ -11,74 +11,41 @@ let total_demographic = null;
 let filtered_data_unavailable_text = null;
 let questions = null;
 
-const settings = {
-  'dashboard': el => {
-    ReactDOM.render(
-      [
-        <Dashboard
-          data={data}
-          questions={questions}
-          comparison_demographic={comparison_demographic}
-          total_demographic={total_demographic}
-          filtered_data_unavailable_text={filtered_data_unavailable_text}
-        />
-      ],
-      el
-    )
+const numberOfCharts = 20;
+
+const settings = Object.assign(
+  {
+    'dashboard': el => {
+      ReactDOM.render(
+        [
+          <Dashboard
+            data={data}
+            questions={questions}
+            comparison_demographic={comparison_demographic}
+            total_demographic={total_demographic}
+            filtered_data_unavailable_text={filtered_data_unavailable_text}
+          />
+        ],
+        el
+      )
+    },
   },
-  'figure1': el => {
-    ReactDOM.render(
-      [
-        <IndividualChart
-          questions={questions.filter(d => d.number_general == "1")}
-          filter_demographic="Race"
-          total_demographic={total_demographic}
-          filtered_data_unavailable_text={filtered_data_unavailable_text}
-        />
-      ],
-      el
-    )
-  },
-  'figure2': el => {
-    ReactDOM.render(
-      [
-        <IndividualChart
-          questions={questions.filter(d => d.number_specific == "2A")}
-          filter_demographic="Education"
-          total_demographic={total_demographic}
-          filtered_data_unavailable_text={filtered_data_unavailable_text}
-        />
-      ],
-      el
-    )
-  },
-  'figure3': el => {
-    ReactDOM.render(
-      [
-        <IndividualChart
-          questions={questions.filter(d => d.number_general == "2")}
-          filter_demographic="Total"
-          total_demographic={total_demographic}
-          filtered_data_unavailable_text={filtered_data_unavailable_text}
-        />
-      ],
-      el
-    )
-  },
-  'figure4': el => {
-    ReactDOM.render(
-      [
-        <IndividualChart
-          questions={questions.filter(d => d.number_general == "4")}
-          filter_demographic="Total"
-          total_demographic={total_demographic}
-          filtered_data_unavailable_text={filtered_data_unavailable_text}
-        />
-      ],
-      el
-    )
-  },
-};
+  ...Array.from({ length: numberOfCharts }, (_, i) => ({
+    [`chart__${i+1}`]: el => {
+      ReactDOM.render(
+        [
+          <IndividualChart
+            questions={questions.filter(d => d.number_general == data.individual_charts[i].question || d.number_specific == data.individual_charts[i].question)}
+            filter_demographic={data.individual_charts[i].demographic_key}
+            total_demographic={total_demographic}
+            filtered_data_unavailable_text={filtered_data_unavailable_text}
+          />
+        ],
+        el
+      )
+    }
+  }))
+);
 
 fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2019.json').then(response => response.json()).then((_data)=>{
   data = _data;
