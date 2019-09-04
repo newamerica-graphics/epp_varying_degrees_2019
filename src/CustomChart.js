@@ -44,34 +44,71 @@ export default class CustomChart extends React.Component {
     let number_of_answers = number_of_keys - number_of_nonanswers;
     
     let colorset_name = this.question.colorset;
-    let { colorset, legend_keys, legend_colorset, chart_colorset, positive_answers, neutral_answers, negative_answers } = [];
+    let { colorset, legend_keys, legend_colorset, chart_colorset } = [];
     let nonanswers = keys.slice(number_of_answers);
     
     if (colorset_name.includes("diverging")) {
+      let index_positive_min = 0;
+      let index_positive_max, index_neutral_min, index_neutral_max, index_negative_min, index_negative_max, 
+          has_neutral,
+          answers_neutral;
+
       colorset = colorsets["diverging"];
+
       if ( colorset_name == "diverging" ) {
+        has_neutral = false;
         legend_colorset = colorset.positive.concat(colorset.negative);
         chart_colorset = colorset.positive.concat(colorsets.base, colorset.negative);
-        positive_answers = keys.slice(0, number_of_answers / 2);
-        negative_answers = keys.slice(number_of_answers / 2, number_of_answers);
-      } else if ( colorset_name == "diverging_neutral_center" || colorset_name == "diverging_neutral_last" ) {
-        legend_colorset = Object.values(colorset).flat();
-        chart_colorset = colorset.positive.concat(colorset.neutral, colorsets.base, colorset.negative);
-        positive_answers = keys.slice(0, (number_of_answers - 1) / 2);
-        if ( colorset_name == "diverging_neutral_center" ) {
-          neutral_answers = keys.slice((number_of_answers - 1) / 2, (number_of_answers + 1) / 2);
-          negative_answers = keys.slice((number_of_answers + 1) / 2, number_of_answers);
-        } else if (colorset_name == "diverging_neutral_last") {
-          negative_answers = keys.slice((number_of_answers - 1) / 2, number_of_answers - 1);
-          neutral_answers = keys.slice(number_of_answers - 1, number_of_answers);
-        }
+        index_positive_max = number_of_answers / 2;
+        index_negative_min = number_of_answers / 2;
+        index_negative_max = number_of_answers;
+      } else if ( colorset_name == "diverging_neutral_center" ) {
+        has_neutral = true;
+        index_positive_max = (number_of_answers - 1) / 2;
+        index_neutral_min =  (number_of_answers - 1) / 2;
+        index_neutral_max =  (number_of_answers + 1) / 2;
+        index_negative_min = (number_of_answers + 1) / 2;
+        index_negative_max = number_of_answers;
+      } else if ( colorset_name == "diverging_neutral_last" ) {
+        has_neutral = true;
+        index_positive_max = (number_of_answers - 1) / 2;
+        index_negative_min = (number_of_answers - 1) / 2;
+        index_negative_max = number_of_answers - 1;
+        index_neutral_min =  number_of_answers - 1;
+        index_neutral_max =  number_of_answers;
       }
-      let positive_neutral = neutral_answers ? positive_answers.concat(neutral_answers) : positive_answers;
-      legend_keys = positive_neutral.concat(negative_answers);
-      chart_keys = positive_neutral.concat(nonanswers, negative_answers);
+
+      let colors_positive = colorset.positive.slice(index_positive_min, index_positive_max).reverse();
+      let colors_negative = colorset.negative.slice(index_positive_min, index_positive_max);
+      let answers_positive = keys.slice(index_positive_min, index_positive_max);
+      let answers_negative = keys.slice(index_negative_min, index_negative_max);
+
+      if ( !has_neutral ) {
+        legend_colorset = colors_positive.concat(colors_negative);
+        chart_colorset = colors_positive.concat(colorsets.base, colors_negative);
+
+        legend_keys = answers_positive.concat(answers_negative);
+        chart_keys = answers_positive.concat(nonanswers, answers_negative);
+      } else {
+        legend_colorset = colors_positive.concat(colorset.neutral, colors_negative);
+        chart_colorset = colors_positive.concat(colorset.neutral, colorsets.base, colors_negative);
+
+        answers_neutral = keys.slice(index_neutral_min, index_neutral_max);
+        legend_keys = answers_positive.concat(answers_neutral, answers_negative);
+        chart_keys = answers_positive.concat(answers_neutral, nonanswers, answers_negative);
+      }
     } else {
-      colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
+      if (colorset_name.includes("scale")) {
+        colorset = colorsets["scale"]
+      } else {
+        colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
+      }
+
       legend_colorset = colorset.slice(0, number_of_answers);
+      if ( colorset_name == "scale_decreasing") {
+        legend_colorset = legend_colorset.reverse();
+      }
+      
       chart_colorset = legend_colorset.concat(colorsets.base);
       legend_keys = keys.slice(0, number_of_answers);
     } 

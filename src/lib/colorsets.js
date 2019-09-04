@@ -9,8 +9,8 @@ const colorsets = {
   ],
   diverging: {
     positive: [
-      colors.turquoise.medium,
       colors.turquoise.light,
+      colors.turquoise.medium,
     ],
     neutral: [
       colors.grey.medium_light,
@@ -20,21 +20,13 @@ const colorsets = {
       colors.red.medium,
     ],
   },
-  scale_decreasing: [
-    colors.turquoise.medium,
-    colors.turquoise.light,
-    colors.turquoise.very_light_2,
-    colors.turquoise.very_light,
-  ],
-  scale_increasing: [
+  scale: [
     colors.turquoise.very_light,
     colors.turquoise.very_light_2,
     colors.turquoise.light,
     colors.turquoise.medium,
-  ],
-  boolean: [
-    colors.turquoise.light,
-    colors.red.light,
+    colors.turquoise.dark,
+    colors.grey.dark,
   ],
   unordered: [
     colors.blue.light,
