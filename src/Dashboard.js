@@ -65,19 +65,17 @@ export default class Dashboard extends React.Component {
             let is_new_question = q.content_general != last_question;
             last_question = q.content_general; 
 
+            if(!finding_questions.includes(q.number_general) && !finding_questions.includes(q.number_specific)) return;
+
             return (
-              <div>
-                {(finding_questions.includes(q.number_general) || finding_questions.includes(q.number_specific)) && 
-                  <CustomChart
-                    question={q}
-                    display_full_question={is_new_question}
-                    filter_demographic={this.state.filter_demographic}
-                    total_demographic={this.total_demographic}
-                    filtered_data_unavailable_text={this.filtered_data_unavailable_text}
-                    onFilterDemographicChange={this.handleFilterDemographicChange}
-                  />
-                }
-              </div>
+              <CustomChart
+                question={q}
+                display_full_question={is_new_question}
+                filter_demographic={this.state.filter_demographic}
+                total_demographic={this.total_demographic}
+                filtered_data_unavailable_text={this.filtered_data_unavailable_text}
+                onFilterDemographicChange={this.handleFilterDemographicChange}
+              />
             )
           })}
         </div>
