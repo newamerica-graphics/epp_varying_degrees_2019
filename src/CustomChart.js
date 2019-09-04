@@ -44,6 +44,7 @@ export default class CustomChart extends React.Component {
     let number_of_answers = number_of_keys - number_of_nonanswers;
     
     let colorset_name = this.question.colorset;
+    let colorset_base = this.props.background_color == "grey" ? colorsets.base.on_grey : colorsets.base.on_white;
     let { colorset, legend_keys, legend_colorset, chart_colorset } = [];
     let nonanswers = keys.slice(number_of_answers);
     
@@ -58,7 +59,7 @@ export default class CustomChart extends React.Component {
       if ( colorset_name == "diverging" ) {
         has_neutral = false;
         legend_colorset = colorset.positive.concat(colorset.negative);
-        chart_colorset = colorset.positive.concat(colorsets.base, colorset.negative);
+        chart_colorset = colorset.positive.concat(colorset_base, colorset.negative);
         index_positive_max = number_of_answers / 2;
         index_negative_min = number_of_answers / 2;
         index_negative_max = number_of_answers;
@@ -85,13 +86,13 @@ export default class CustomChart extends React.Component {
 
       if ( !has_neutral ) {
         legend_colorset = colors_positive.concat(colors_negative);
-        chart_colorset = colors_positive.concat(colorsets.base, colors_negative);
+        chart_colorset = colors_positive.concat(colorset_base, colors_negative);
 
         legend_keys = answers_positive.concat(answers_negative);
         chart_keys = answers_positive.concat(nonanswers, answers_negative);
       } else {
         legend_colorset = colors_positive.concat(colorset.neutral, colors_negative);
-        chart_colorset = colors_positive.concat(colorset.neutral, colorsets.base, colors_negative);
+        chart_colorset = colors_positive.concat(colorset.neutral, colorset_base, colors_negative);
 
         answers_neutral = keys.slice(index_neutral_min, index_neutral_max);
         legend_keys = answers_positive.concat(answers_neutral, answers_negative);
@@ -108,8 +109,8 @@ export default class CustomChart extends React.Component {
       if ( colorset_name == "scale_decreasing") {
         legend_colorset = legend_colorset.reverse();
       }
-      
-      chart_colorset = legend_colorset.concat(colorsets.base);
+
+      chart_colorset = legend_colorset.concat(colorset_base);
       legend_keys = keys.slice(0, number_of_answers);
     } 
 

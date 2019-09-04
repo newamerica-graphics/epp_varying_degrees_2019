@@ -2,11 +2,18 @@ import { colors } from "./colors";
 
 
 const colorsets = {
-  base: [
-    colors.grey.light,
-    colors.white,
-    colors.white,
-  ],
+  base: {
+    on_white: [
+      colors.grey.light,
+      colors.grey.chart_background,
+      colors.grey.chart_background,
+    ],
+    on_grey: [
+      colors.grey.light,
+      colors.white,
+      colors.white,
+    ],
+  },
   diverging: {
     positive: [
       colors.turquoise.light,

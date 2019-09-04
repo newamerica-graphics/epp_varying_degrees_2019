@@ -2,6 +2,7 @@ const colors = {
   white: "#FFFFFF",
   black: "#2c2f35",
   grey: {
+    chart_background: "#EFEFEF",
     light: "#EAEAEB",
     medium_light: "#CBCBCD",
     medium: "#ABACAE",
