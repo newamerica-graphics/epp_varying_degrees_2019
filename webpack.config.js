@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
 
-const numberOfCharts = 20;
+const numberOfCharts = 200;
 
 module.exports = env => {
   return {

@@ -11,7 +11,7 @@ let total_demographic = null;
 let filtered_data_unavailable_text = null;
 let questions = null;
 
-const numberOfCharts = 20;
+const numberOfCharts = 200;
 
 const settings = Object.assign(
   {
