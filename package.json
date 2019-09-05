@@ -1,6 +1,6 @@
 {
   "name": "epp_varying_degrees_2019",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "",
   "main": "src/index.js",
   "scripts": {
