@@ -5,13 +5,13 @@ const colorsets = {
   base: {
     on_white: [
       colors.grey.light,
-      // colors.grey.chart_background,
-      // colors.grey.chart_background,
+      colors.grey.chart_background,
+      colors.grey.chart_background,
     ],
     on_grey: [
       colors.grey.light,
-      // colors.white,
-      // colors.white,
+      colors.white,
+      colors.white,
     ],
   },
   diverging: {
