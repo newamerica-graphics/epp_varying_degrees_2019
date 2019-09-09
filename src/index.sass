@@ -117,10 +117,12 @@ h1, h2, h3, h4, h5, h6
 		font-variant-numeric: lining-nums
 
 .n-value
+	display: block
+	margin-top: -5px
 	color: $color__text--light
 
-	&__item:not(:last-child)::after
-		content: "; "
+	// &__item:not(:last-child)::after
+	// 	content: "; "
 
 .tooltip
 	&__title

@@ -191,12 +191,13 @@ export default class CustomChart extends React.Component {
           )}
         </Chart>
         <small className="n-value" style={{marginLeft: margin_left}}>
-          {(data_is_filtered || number_of_bars == 1)
+          n = {this.question.n_size}
+          {/* {(data_is_filtered || number_of_bars == 1)
             ? (<span>n = {this.question.total[0].demographic_total}</span>)
             : demographics.map(d => (
               <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
             ))
-          }
+          } */}
         </small>
       </div>
     );
