@@ -70,58 +70,61 @@ const HorizontalStackedBar = ({
         stroke="#333"
         strokeWidth="2px"
       />
-      <BarStackHorizontal
-        data={data}
-        keys={keys}
-        height={yMax}
-        y={y}
-        xScale={xScale}
-        yScale={yScale}
-        color={colorScale}
-      >
-        {barStacks => {
-          return barStacks.map(barStack =>
-            <Group className="bar-stack">
-              {barStack.bars.map(bar => (
-                <Group 
-                  className={`
-                    bar
-                    bar--demographic-${bar.bar.data.demographic_value.replace(/\s+/g, '-').toLowerCase()} 
-                    bar--key-${bar.key.replace(/\s+/g, '-') .toLowerCase()}
-                  `}
-                  key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                >
-                  <rect
-                    className="bar__rectangle"
-                    x={bar.x}
-                    y={bar.bar.data.demographic_value == "Total" ? bar.y - total_bar_offset : bar.y}
-                    width={bar.width}
-                    height={bar.height}
-                    fill={bar.color}
-                    onMouseLeave={handleMouseLeave ? handleMouseLeave : null}
-                    onMouseMove={event =>
-                      handleMouseMove
-                        ? handleMouseMove({ event, data, datum: bar })
-                        : null
-                    }
-                  />
-                  <Text
-                    x={bar.x + 5}
-                    y={bar.y + 0.5 * bar.height - (bar.bar.data.demographic_value == "Total" ? total_bar_offset : 0)}
-                    className={`bar__text bar__text--color-`+bar.color.slice(1)}
-                    verticalAnchor="middle"
+      <Group className="bars">
+        <BarStackHorizontal
+          data={data}
+          keys={keys}
+          height={yMax}
+          y={y}
+          xScale={xScale}
+          yScale={yScale}
+          color={colorScale}
+        >
+          {barStacks => {
+            return barStacks.map(barStack =>
+              <Group className="bar-stack">
+                {barStack.bars.map(bar => (
+                  <Group 
+                    className={`
+                      bar
+                      bar--demographic-${bar.bar.data.demographic_value.replace(/\s+/g, '-').toLowerCase()} 
+                      bar--key-${bar.key.replace(/\s+/g, '-') .toLowerCase()}
+                      bar--color-${bar.color.slice(1)}
+                    `}
+                    key={`barstack-horizontal-${barStack.index}-${bar.index}`}
                   >
-                    {bar.bar.data[bar.key] >= 6.5 
-                      && Math.round(bar.bar.data[bar.key])
-                      + `%`
-                    }
-                  </Text>
-                </Group>
-              ))}
-            </Group>
-          );
-        }}
-      </BarStackHorizontal>
+                    <rect
+                      className="bar__rectangle"
+                      x={bar.x}
+                      y={bar.bar.data.demographic_value == "Total" ? bar.y - total_bar_offset : bar.y}
+                      width={bar.width}
+                      height={bar.height}
+                      fill={bar.color}
+                      onMouseLeave={handleMouseLeave ? handleMouseLeave : null}
+                      onMouseMove={event =>
+                        handleMouseMove
+                          ? handleMouseMove({ event, data, datum: bar })
+                          : null
+                      }
+                    />
+                    <Text
+                      x={bar.x + 5}
+                      y={bar.y + 0.5 * bar.height - (bar.bar.data.demographic_value == "Total" ? total_bar_offset : 0)}
+                      className="bar__text"
+                      verticalAnchor="middle"
+                    >
+                      {bar.bar.data[bar.key] >= 6.5
+                        && Math.round(bar.bar.data[bar.key])
+                        + `%`
+                      }
+                    </Text>
+                  </Group>
+                ))}
+              </Group>
+            );
+          }}
+        </BarStackHorizontal>
+      </Group>
       <AxisLeft
         scale={yScale}
         hideAxisLine={true}

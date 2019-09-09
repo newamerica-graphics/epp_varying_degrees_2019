@@ -155,10 +155,10 @@ h1, h2, h3, h4, h5, h6
 			text-align: right
 
 .bar
+	$root: &
+
 	&__rectangle
-		// stroke: white
-		// stroke-width: 0.5px
-		transition: fill $transition--bar
+		transition: filter $transition--bar
 
 	&__text
 		fill: white
@@ -167,24 +167,29 @@ h1, h2, h3, h4, h5, h6
 		transition: fill $transition--bar
 
 		// TODO assess all colors
-		&--color-f4dc70,
-		&--color-CBCBCD,
-		&--color-EAEAEB,
-		&--color-EFEFEF,
-		&--color-white,
-		&--color-97DED9,
-		&--color-62CDC6,
+		#{$root}--color-f4dc70 &,
+		#{$root}--color-CBCBCD &,
+		#{$root}--color-EAEAEB &,
+		#{$root}--color-EFEFEF &,
+		#{$root}--color-97DED9 &,
+		#{$root}--color-62CDC6 &,
+		#{$root}--color-white &
 			fill: $color__text
 
-
-.bar-stack
+.bars
 	&:hover
 		.bar__rectangle
-			fill: $na-color__grey
-			// opacity: 0.5
+			filter: grayscale(100%) brightness(130%)
+
+		.bar-stack
+			&:hover
+				.bar__rectangle
+					filter: grayscale(20%) brightness(110%)
 		
-		.bar__text
-			fill: white
+		.bar
+			&:hover
+				.bar__rectangle
+					filter: saturate(130%) brightness(70%)
 
 .logo-text
 	font-size: 12px
