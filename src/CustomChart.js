@@ -12,7 +12,7 @@ export default class CustomChart extends React.Component {
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
     this.number_of_meta_keys = 2; // demographic_value and demographic_total
-    this.number_of_nonanswers = 3 // "DON'T KNOW", "SKIPPED ON WEB", "REFUSED" // TODO don't hard code
+    this.number_of_nonanswers = 1 // "DON'T KNOW" // TODO don't hard code
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
   }
