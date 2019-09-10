@@ -61,19 +61,24 @@ h1, h2, h3, h4, h5, h6
 				background: $background-color
 				cursor: inherit
 
+.dv-dashboard-wrapper
+	padding-top: 2rem
+
 .dv-dashboard
 	padding-top: 2rem
 	display: grid
 	grid-gap: 2rem
 
 	@media screen and ( min-width: 800px )
-		height: calc(100vh - 70px - 65px)
+		height: calc(100vh - 70px - 65px - 35px - 2rem)
 		grid-template-columns: 1fr 2fr
 		grid-gap: 1rem
 		
 		&__column
+			max-width: 100%
 			padding-right: 1rem
-			height: calc(100vh - 70px - 65px - 2rem)
+			margin-bottom: 1rem
+			height: calc(100vh - 70px - 65px - 35px - 2rem - 2rem - 1rem)
 			overflow-y: scroll
 
 .dv-individual-chart

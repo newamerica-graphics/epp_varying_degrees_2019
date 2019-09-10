@@ -40,8 +40,8 @@ export default class Dashboard extends React.Component {
     let last_question;
       
     return (
-      <div>
-        <h2 className="report__body__section-title">{this.meta.dashboard_title}</h2>
+      <div className="dv-dashboard-wrapper">
+        <h2>{this.meta.dashboard_title}</h2>
         <ChartContainer className="dv-dashboard">
           <div className="dv-dashboard__column">
             <nav className="dashboard-nav">
