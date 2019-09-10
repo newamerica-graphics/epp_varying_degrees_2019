@@ -40,47 +40,50 @@ export default class Dashboard extends React.Component {
     let last_question;
       
     return (
-      <ChartContainer className="dv-dashboard">
-        <div className="dv-dashboard__column">
-          <nav className="dashboard-nav">
-            <label>
-              <h4 className="dashboard-nav__heading dashboard-nav__heading--first">{this.filter_heading}</h4>
-            </label>
-            <Select
-              onChange={this.handleFilterDemographicChange}
-              options={this.props.data.demographic_keys.map(d => d.demographic_key)}
-              className="dashboard-nav__select"
-            />
-            <h4 className="dashboard-nav__heading">{this.findings_heading}</h4>
-            <ButtonGroup
-              onChange={this.handleFilterFindingChange}
-              options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
-              active={this.props.data.findings[0].finding_short}
-            />
-          </nav>
-        </div>
-        <div className="dv-dashboard__column">
-          <h2>{selected_finding.finding_title}</h2>
-          {this.questions.map((q) => {
-            let is_new_question = q.content_general != last_question;
-            last_question = q.content_general; 
-
-            if(!finding_questions.includes(q.number_general) && !finding_questions.includes(q.number_specific)) return;
-
-            return (
-              <CustomChart
-                question={q}
-                display_full_question={is_new_question}
-                filter_demographic={this.state.filter_demographic}
-                total_demographic={this.total_demographic}
-                filtered_data_unavailable_text={this.filtered_data_unavailable_text}
-                onFilterDemographicChange={this.handleFilterDemographicChange}
-                number_of_nonanswers = {this.props.number_of_nonanswers}
+      <div>
+        <h2 className="report__body__section-title">{this.meta.dashboard_title}</h2>
+        <ChartContainer className="dv-dashboard">
+          <div className="dv-dashboard__column">
+            <nav className="dashboard-nav">
+              <label>
+                <h4 className="dashboard-nav__heading dashboard-nav__heading--first">{this.filter_heading}</h4>
+              </label>
+              <Select
+                onChange={this.handleFilterDemographicChange}
+                options={this.props.data.demographic_keys.map(d => d.demographic_key)}
+                className="dashboard-nav__select"
               />
-            )
-          })}
-        </div>
-      </ChartContainer>
+              <h4 className="dashboard-nav__heading">{this.findings_heading}</h4>
+              <ButtonGroup
+                onChange={this.handleFilterFindingChange}
+                options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
+                active={this.props.data.findings[0].finding_short}
+              />
+            </nav>
+          </div>
+          <div className="dv-dashboard__column">
+            <h2>{selected_finding.finding_title}</h2>
+            {this.questions.map((q) => {
+              let is_new_question = q.content_general != last_question;
+              last_question = q.content_general; 
+
+              if(!finding_questions.includes(q.number_general) && !finding_questions.includes(q.number_specific)) return;
+
+              return (
+                <CustomChart
+                  question={q}
+                  display_full_question={is_new_question}
+                  filter_demographic={this.state.filter_demographic}
+                  total_demographic={this.total_demographic}
+                  filtered_data_unavailable_text={this.filtered_data_unavailable_text}
+                  onFilterDemographicChange={this.handleFilterDemographicChange}
+                  number_of_nonanswers = {this.props.number_of_nonanswers}
+                />
+              )
+            })}
+          </div>
+        </ChartContainer>
+      </div>
     );
   }
 }
