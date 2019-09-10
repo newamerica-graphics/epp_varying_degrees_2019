@@ -9,6 +9,7 @@ let data = null;
 let comparison_demographic = null;
 let total_demographic = null;
 let filtered_data_unavailable_text = null;
+let number_of_nonanswers = null;
 let questions = null;
 
 const numberOfCharts = 200;
@@ -24,6 +25,7 @@ const settings = Object.assign(
             comparison_demographic={comparison_demographic}
             total_demographic={total_demographic}
             filtered_data_unavailable_text={filtered_data_unavailable_text}
+            number_of_nonanswers={number_of_nonanswers}
           />
         ],
         el
@@ -39,6 +41,7 @@ const settings = Object.assign(
             filter_demographic={data.individual_charts[i].demographic_key}
             total_demographic={total_demographic}
             filtered_data_unavailable_text={filtered_data_unavailable_text}
+            number_of_nonanswers={number_of_nonanswers}
           />
         ],
         el
@@ -52,6 +55,7 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
   comparison_demographic = data.meta[0].comparison_demographic;
   total_demographic = data.meta[0].demographic_key_for_total;
   filtered_data_unavailable_text = data.meta[0].filtered_data_unavailable_text;
+  number_of_nonanswers = data.meta[0].number_of_nonanswers;
   questions = data.questions
   .map(q => {
     let q_data = data.data.filter(d => 

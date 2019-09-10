@@ -21,8 +21,9 @@ export default class IndividualChart extends React.Component {
               filter_demographic={this.props.filter_demographic}
               total_demographic={this.props.total_demographic}
               filtered_data_unavailable_text={this.props.filtered_data_unavailable_text}
+              number_of_nonanswers = {this.props.number_of_nonanswers}
               background_color="grey"
-              className="custom-chart--individual-chart"   
+              className="custom-chart--individual-chart"
             />
           );
         })}
