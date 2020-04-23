@@ -1,8 +1,7 @@
-# Varying Degrees 2019
+# Varying Degrees
 
-Built in 2019 using [Teddy](https://github.com/newamericafoundation/teddy) and the [data-viz-boilerplate](https://github.com/newamericafoundation/data-viz-boilerplate).
+Varying degrees for 2018 on, using [Teddy](https://github.com/newamericafoundation/teddy) and the [data-viz-boilerplate](https://github.com/newamericafoundation/data-viz-boilerplate). Each year has a branch named for that year.
 
-2018 version: [varying-degrees-2018](https://github.com/newamerica-graphics/varying-degrees-2018)  
 2017 version: [varying-degrees](https://github.com/newamericafoundation/varying-degrees) and [varying-degrees-backend](https://github.com/newamericafoundation/varying-degrees-backend)
 
 ## Deployment
