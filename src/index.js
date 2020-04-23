@@ -50,7 +50,7 @@ const settings = Object.assign(
   }))
 );
 
-fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2019.json').then(response => response.json()).then((_data)=>{
+fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2020.json').then(response => response.json()).then((_data)=>{
   data = _data;
   comparison_demographic = data.meta[0].comparison_demographic;
   total_demographic = data.meta[0].demographic_key_for_total;
@@ -145,7 +145,7 @@ This is the format for the new questions data object:
     {
       demographic_key: "Total",
       demographics: [
-        demographic_value: "2019",
+        demographic_value: "2018",
         demographic_total: 5023,
         "Much more": "2%", // "Response" for the first value
         "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
