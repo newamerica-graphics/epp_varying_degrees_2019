@@ -27,6 +27,19 @@ const colorsets = {
       colors.red.medium,
     ],
   },
+  diverging_unordered: {
+    positive: [
+      colors.blue.light,
+      colors.blue.medium,
+    ],
+    neutral: [
+      colors.grey.medium_light,
+    ],
+    negative: [
+      colors.orange.light,
+      colors.orange.medium,
+    ],
+  },
   scale: [
     colors.turquoise.very_light,
     colors.turquoise.very_light_2,
@@ -34,6 +47,9 @@ const colorsets = {
     colors.turquoise.medium,
     colors.turquoise.dark,
     colors.grey.dark,
+  ],
+  scale_many: [
+    '#97ded9', '#76d2cc', '#53c6bf', '#2dbab1', '#27aba3', '#219c95', '#1b8e87', '#14807a', '#0d726d', '#066460', '#005753'
   ],
   unordered: [
     colors.blue.light,
@@ -43,6 +59,13 @@ const colorsets = {
     colors.turquoise.light,
     colors.brown.light,
     colors.purple.light,
+    colors.blue.medium,
+    colors.orange.medium,
+    colors.red.medium,
+    colors.yellow.medium,
+    colors.turquoise.medium,
+    colors.brown.medium,
+    colors.purple.medium,
   ],
 };
 

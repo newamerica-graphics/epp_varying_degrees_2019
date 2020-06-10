@@ -54,30 +54,30 @@ export default class CustomChart extends React.Component {
           has_neutral,
           answers_neutral;
 
-      colorset = colorsets["diverging"];
+      colorset = colorset_name.includes("unordered") ? colorsets["diverging_unordered"] : colorsets["diverging"];
 
-      if ( colorset_name == "diverging" ) {
-        has_neutral = false;
-        legend_colorset = colorset.positive.concat(colorset.negative);
-        chart_colorset = colorset.positive.concat(colorset_base, colorset.negative);
-        index_positive_max = number_of_answers / 2;
-        index_negative_min = number_of_answers / 2;
-        index_negative_max = number_of_answers;
-      } else if ( colorset_name == "diverging_neutral_center" ) {
+      if ( colorset_name.includes("neutral_center") ) {
         has_neutral = true;
         index_positive_max = (number_of_answers - 1) / 2;
-        index_neutral_min =  (number_of_answers - 1) / 2;
-        index_neutral_max =  (number_of_answers + 1) / 2;
+        index_neutral_min  = (number_of_answers - 1) / 2;
+        index_neutral_max  = (number_of_answers + 1) / 2;
         index_negative_min = (number_of_answers + 1) / 2;
         index_negative_max = number_of_answers;
-      } else if ( colorset_name == "diverging_neutral_last" ) {
+      } else if ( colorset_name.includes("neutral_last") ) {
         has_neutral = true;
         index_positive_max = (number_of_answers - 1) / 2;
         index_negative_min = (number_of_answers - 1) / 2;
         index_negative_max = number_of_answers - 1;
-        index_neutral_min =  number_of_answers - 1;
-        index_neutral_max =  number_of_answers;
-      }
+        index_neutral_min  = number_of_answers - 1;
+        index_neutral_max  = number_of_answers;
+      } else {
+        has_neutral = false;
+        legend_colorset = colorset.positive.concat(colorset.negative);
+        chart_colorset  = colorset.positive.concat(colorset_base, colorset.negative);
+        index_positive_max = number_of_answers / 2;
+        index_negative_min = number_of_answers / 2;
+        index_negative_max = number_of_answers;
+      } 
 
       let colors_positive = colorset.positive.slice(index_positive_min, index_positive_max).reverse();
       let colors_negative = colorset.negative.slice(index_positive_min, index_positive_max);
@@ -101,6 +101,9 @@ export default class CustomChart extends React.Component {
     } else {
       if (colorset_name.includes("scale")) {
         colorset = colorsets["scale"]
+        if (colorset_name.includes("many")) {
+          colorset = colorsets["scale_many"]
+        }
       } else {
         colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
       }
