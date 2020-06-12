@@ -16,6 +16,7 @@ export default class Dashboard extends React.Component {
 
     this.data = this.props.data;
     this.meta = this.data.meta[0];
+    this.finding_questions = this.props.data.finding_questions
     this.questions = this.props.questions;
     this.comparison_demographic = this.props.comparison_demographic;
     this.total_demographic = this.props.total_demographic;
@@ -34,7 +35,7 @@ export default class Dashboard extends React.Component {
 
   render() {
     let selected_finding = this.props.data.findings.find(d => d.finding_short == this.state.filter_finding);
-    let finding_questions = this.props.data.finding_questions
+    let finding_questions = this.finding_questions
       .filter(d => d.finding == this.state.filter_finding)
       .map(finding_question => finding_question.question_number);
     let last_question;
