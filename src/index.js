@@ -13,7 +13,7 @@ let number_of_nonanswers = null;
 let questions = null;
 let finding_question_numbers;
 
-const numberOfCharts = 200;
+// const numberOfCharts = 200;
 
 const settings = Object.assign(
   {
@@ -33,22 +33,22 @@ const settings = Object.assign(
       )
     },
   },
-  ...Array.from({ length: numberOfCharts }, (_, i) => ({
-    [`chart__${i+1}`]: el => {
-      ReactDOM.render(
-        [
-          <IndividualChart
-            questions={questions.filter(d => d.number_general == data.individual_charts[i].question || d.number_specific == data.individual_charts[i].question)}
-            filter_demographic={data.individual_charts[i].demographic_key}
-            total_demographic={total_demographic}
-            filtered_data_unavailable_text={filtered_data_unavailable_text}
-            number_of_nonanswers={number_of_nonanswers}
-          />
-        ],
-        el
-      )
-    }
-  }))
+  // ...Array.from({ length: numberOfCharts }, (_, i) => ({
+  //   [`chart__${i+1}`]: el => {
+  //     ReactDOM.render(
+  //       [
+  //         <IndividualChart
+  //           questions={questions.filter(d => d.number_general == data.individual_charts[i].question || d.number_specific == data.individual_charts[i].question)}
+  //           filter_demographic={data.individual_charts[i].demographic_key}
+  //           total_demographic={total_demographic}
+  //           filtered_data_unavailable_text={filtered_data_unavailable_text}
+  //           number_of_nonanswers={number_of_nonanswers}
+  //         />
+  //       ],
+  //       el
+  //     )
+  //   }
+  // }))
 );
 
 fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2020.json').then(response => response.json()).then((_data)=>{
