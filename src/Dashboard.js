@@ -39,6 +39,8 @@ export default class Dashboard extends React.Component {
       .filter(d => d.finding == this.state.filter_finding)
       .map(finding_question => finding_question.question_number);
     let last_question;
+
+    window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"])for(var e in a.data["datawrapper-height"]){var t=document.getElementById("datawrapper-chart-"+e)||document.querySelector("iframe[src*='"+e+"']");t&&(t.style.height=a.data["datawrapper-height"][e]+"px")}}))
       
     return (
       <div className="dv-dashboard-wrapper">
@@ -68,7 +70,24 @@ export default class Dashboard extends React.Component {
               if(!finding_questions.includes(q.number_general) && !finding_questions.includes(q.number_specific)) return;
 
               let is_new_question = q.content_general != last_question;
-              last_question = q.content_general; 
+              last_question = q.content_general;
+
+              if (q.datawrapper_code) {
+                return(
+                  <div className={`datawrapper-chart ${!is_new_question && "custom-chart--partial-chart"}`}>
+                    {is_new_question && 
+                      <h3 className="custom-chart__title">{q.content_general}</h3>
+                    }
+                    {q.content_specific && 
+                      <h4 className="custom-chart__title custom-chart__title--specific">{q.content_specific}</h4>
+                    }
+                    <iframe aria-label="Chart" id={`datawrapper-chart-${q.datawrapper_code}`} src={`https://datawrapper.dwcdn.net/${q.datawrapper_code}/`} scrolling="no" frameborder="0" style={{width: 0, minWidth: "100%", border: "none"}} height="800"></iframe>
+                    <small className="n-value">
+                      n = {q.n_size}
+                    </small>
+                  </div>
+                );
+              }
 
               return (
                 <CustomChart

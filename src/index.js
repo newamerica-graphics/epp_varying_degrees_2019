@@ -72,6 +72,7 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
       content_general: q.content_general,
       content_specific: q.content_specific,
       colorset: q.colorset,
+      datawrapper_code: q.datawrapper_code,
       n_size: q.n_size,
       total: [
         Object.assign(
