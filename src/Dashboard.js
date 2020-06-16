@@ -7,8 +7,8 @@ export default class Dashboard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      filter_demographic: 'Total',
-      filter_finding: 'jobs',
+      filter_demographic: this.props.total_demographic,
+      filter_finding: this.props.data.findings[0].finding_short,
     };
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
