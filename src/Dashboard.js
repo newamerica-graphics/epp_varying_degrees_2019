@@ -81,10 +81,17 @@ export default class Dashboard extends React.Component {
                     {q.content_specific && 
                       <h4 className="custom-chart__title custom-chart__title--specific">{q.content_specific}</h4>
                     }
-                    <iframe aria-label="Chart" id={`datawrapper-chart-${q.datawrapper_code}`} src={`https://datawrapper.dwcdn.net/${q.datawrapper_code}/`} scrolling="no" frameborder="0" style={{width: 0, minWidth: "100%", border: "none"}} height="800"></iframe>
-                    <small className="n-value">
-                      n = {q.n_size}
-                    </small>
+                    {this.state.filter_demographic != this.props.total_demographic
+                      ?
+                      <p class="custom-chart__message">{this.filtered_data_unavailable_text}</p>
+                      :
+                      <div>
+                        <iframe aria-label="Chart" id={`datawrapper-chart-${q.datawrapper_code}`} src={`https://datawrapper.dwcdn.net/${q.datawrapper_code}/`} scrolling="no" frameborder="0" style={{width: 0, minWidth: "100%", border: "none"}} height="800"></iframe>
+                        <small className="n-value">
+                          n = {q.n_size}
+                        </small>
+                      </div>
+                    }
                   </div>
                 );
               }
