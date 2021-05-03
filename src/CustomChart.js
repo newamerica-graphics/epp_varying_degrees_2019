@@ -12,7 +12,7 @@ export default class CustomChart extends React.Component {
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
     this.number_of_meta_keys = 2; // demographic_value and demographic_total
-    this.number_of_nonanswers = this.props.number_of_nonanswers; // "Don't know, Skipped, Refused" // TODO don't hard code
+    this.list_of_nonanswers = this.props.list_of_nonanswers; // "Don't know, Skipped, Refused" // TODO don't hard code
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
   }
@@ -39,15 +39,16 @@ export default class CustomChart extends React.Component {
     let keys = Object.keys(demographics[0]).slice(this.number_of_meta_keys);
     let chart_keys = keys;
 
-    let number_of_keys = keys.length;
-    let number_of_nonanswers = this.number_of_nonanswers;
-    let number_of_answers = number_of_keys - number_of_nonanswers;
-    
+    let nonanswers = keys.filter(key => this.list_of_nonanswers.includes(key))
+    let answers = keys.filter(key => !this.list_of_nonanswers.includes(key))
+    let number_of_nonanswers = nonanswers.length;
+    let number_of_answers = answers.length;
+
     let colorset_name = this.question.colorset;
     let colorset_base = this.props.background_color == "grey" ? colorsets.base.on_grey : colorsets.base.on_white;
+    colorset_base = colorset_base.slice(0, number_of_nonanswers)
     let { colorset, legend_keys, legend_colorset, chart_colorset } = [];
-    let nonanswers = keys.slice(number_of_answers);
-    
+
     if (colorset_name.includes("diverging")) {
       let index_positive_min = 0;
       let index_positive_max, index_neutral_min, index_neutral_max, index_negative_min, index_negative_max, 

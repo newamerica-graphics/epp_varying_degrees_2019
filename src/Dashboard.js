@@ -104,7 +104,7 @@ export default class Dashboard extends React.Component {
                   total_demographic={this.total_demographic}
                   filtered_data_unavailable_text={this.filtered_data_unavailable_text}
                   onFilterDemographicChange={this.handleFilterDemographicChange}
-                  number_of_nonanswers = {this.props.number_of_nonanswers}
+                  list_of_nonanswers = {this.props.list_of_nonanswers}
                 />
               )
             })}
