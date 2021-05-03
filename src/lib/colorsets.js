@@ -48,8 +48,26 @@ const colorsets = {
     colors.turquoise.dark,
     colors.grey.dark,
   ],
-  scale_many: [
+  increasing_many: [
     '#97ded9', '#76d2cc', '#53c6bf', '#2dbab1', '#27aba3', '#219c95', '#1b8e87', '#14807a', '#0d726d', '#066460', '#005753'
+  ],
+  increasing_income: [
+    colors.turquoise.very_light,
+    colors.turquoise.very_light_2,
+    colors.turquoise.light,
+    colors.turquoise.medium,
+    colors.turquoise.dark,
+    colors.blue.very_light,
+    colors.blue.very_light_2,
+    colors.blue.light,
+    colors.blue.medium,
+    colors.blue.dark,
+    colors.purple.very_light,
+    colors.purple.very_light_2,
+    colors.purple.light,
+    colors.purple.medium,
+    colors.purple.dark,
+    colors.grey.dark,
   ],
   unordered: [
     colors.blue.light,

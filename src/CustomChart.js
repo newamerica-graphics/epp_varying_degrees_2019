@@ -101,9 +101,6 @@ export default class CustomChart extends React.Component {
     } else {
       if (colorset_name.includes("scale")) {
         colorset = colorsets["scale"]
-        if (colorset_name.includes("many")) {
-          colorset = colorsets["scale_many"]
-        }
       } else {
         colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
       }

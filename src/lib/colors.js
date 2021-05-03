@@ -29,6 +29,7 @@ const colors = {
     dark: "#692025" },
   purple: {
     very_light: "#bd9fc6",
+    very_light_2: "#af8ab9",
     light: "#A076AC",
     medium: "#74557E",
     dark: "#48304F"
