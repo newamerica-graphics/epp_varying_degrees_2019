@@ -59,15 +59,12 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
   number_of_nonanswers = data.meta[0].number_of_nonanswers;
   finding_question_numbers =  data.finding_questions.map(q => q.question_number);
   questions = data.questions.filter(q => 
-    finding_question_numbers.includes(q.number_general) 
-    ? true 
-    : finding_question_numbers.includes(q.number_specific)
+    finding_question_numbers.includes(q.number_specific)
   ).map(q => {
     let q_data = data.data.filter(d => 
       d["Q Number"] == q.number_specific 
     );
     return ({
-      number_general: q.number_general,
       number_specific: q.number_specific,
       content_general: q.content_general,
       content_specific: q.content_specific,

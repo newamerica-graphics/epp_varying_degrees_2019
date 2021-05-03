@@ -67,7 +67,7 @@ export default class Dashboard extends React.Component {
           <div className="dv-dashboard__column">
             <h2>{selected_finding.finding_title}</h2>
             {this.questions.map((q) => {
-              if(!finding_questions.includes(q.number_general) && !finding_questions.includes(q.number_specific)) return;
+              if(!finding_questions.includes(q.number_specific)) return;
 
               let is_new_question = q.content_general != last_question;
               last_question = q.content_general;
