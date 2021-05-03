@@ -51,7 +51,7 @@ const settings = Object.assign(
   // }))
 );
 
-fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2020.json').then(response => response.json()).then((_data)=>{
+fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_degrees_2021.json').then(response => response.json()).then((_data)=>{
   data = _data;
   comparison_demographic = data.meta[0].comparison_demographic;
   total_demographic = data.meta[0].demographic_key_for_total;
