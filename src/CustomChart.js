@@ -88,8 +88,8 @@ export default class CustomChart extends React.Component {
         index_negative_max = number_of_answers;
       } 
 
-      let colors_positive = colorset.positive.slice(index_positive_min, index_positive_max).reverse();
-      let colors_negative = colorset.negative.slice(index_positive_min, index_positive_max);
+      let colors_positive = colorset.positive.slice(index_positive_min, index_positive_max);
+      let colors_negative = colorset.negative.slice(index_positive_min, index_positive_max).reverse();
       let answers_positive = keys.slice(index_positive_min, index_positive_max);
       let answers_negative = keys.slice(index_negative_min, index_negative_max);
 

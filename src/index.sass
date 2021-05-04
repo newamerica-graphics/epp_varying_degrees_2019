@@ -170,20 +170,36 @@ h1, h2, h3, h4, h5, h6
 		transition: filter $transition--bar
 
 	&__text
-		fill: white
+		fill: $color__text
 		pointer-events: none
 		font-size: 14px
 		transition: fill $transition--bar
 
-		// TODO assess all colors
-		#{$root}--color-f4dc70 &,
-		#{$root}--color-CBCBCD &,
-		#{$root}--color-EAEAEB &,
-		#{$root}--color-EFEFEF &,
-		#{$root}--color-97DED9 &,
-		#{$root}--color-62CDC6 &,
-		#{$root}--color-white &
-			fill: $color__text
+	&--color-005E57,  // #005E57
+	&--color-107C74,  // #107C74
+	&--color-209B93,  // #209B93
+	// &--color-2FBCB3,  // #2FBCB3
+	&--color-004275,  // #004275
+	&--color-055795,  // #055795
+	&--color-0E6DB6,  // #0E6DB6
+	// &--color-1185E0,  // #1185E0
+	&--color-743083,  // #743083
+	&--color-8D4A9B,  // #8D4A9B
+	&--color-AB0009,  // #AB0009
+	&--color-C01E22,  // #C01E22
+	// &--color-F33F47,  // #eb4a52
+	&--color-5A3000,  // #5A3000
+	&--color-743F03,  // #743F03
+	&--color-904E04,  // #904E04
+	&--color-AC5E06,  // #AC5E06
+	&--color-005E57,  // #005E57
+	&--color-137A7C,  // #137A7C
+	&--color-3597A0,  // #3597A0
+	&--color-333333,   // #333333
+	&--color-515151,   // #515151
+	&--color-717171,   // #717171
+		#{$root}__text
+			fill: white
 
 .bars
 	&:hover
