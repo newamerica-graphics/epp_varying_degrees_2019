@@ -20,7 +20,7 @@ const colorsets = {
       colors.turquoise.medium,
     ],
     neutral: [
-      colors.grey.medium_light,
+      colors.grey.neutral,
     ],
     negative: [
       colors.red.light,
@@ -33,7 +33,7 @@ const colorsets = {
       colors.blue.medium,
     ],
     neutral: [
-      colors.grey.medium_light,
+      colors.grey.neutral,
     ],
     negative: [
       colors.orange.light,
@@ -49,7 +49,7 @@ const colorsets = {
     colors.grey.dark,
   ],
   scale_with_zero: [
-    colors.grey.medium_light,
+    colors.grey.neutral,
     colors.turquoise.very_light_2,
     colors.turquoise.light,
     colors.turquoise.medium,

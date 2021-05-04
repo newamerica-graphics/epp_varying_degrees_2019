@@ -4,7 +4,7 @@ const colors = {
   grey: {
     chart_background: "#EFEFEF",
     light: "#EAEAEB",
-    medium_light: "#CBCBCD",
+    neutral: "#CBCBCD",
     medium: "#ABACAE",
     dark: "#333"
   },
