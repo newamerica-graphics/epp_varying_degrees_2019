@@ -48,6 +48,14 @@ const colorsets = {
     colors.turquoise.dark,
     colors.grey.dark,
   ],
+  scale_with_zero: [
+    colors.grey.medium_light,
+    colors.turquoise.very_light_2,
+    colors.turquoise.light,
+    colors.turquoise.medium,
+    colors.turquoise.dark,
+    colors.grey.dark,
+  ],
   increasing_many: [
     '#97ded9', '#76d2cc', '#53c6bf', '#2dbab1', '#27aba3', '#219c95', '#1b8e87', '#14807a', '#0d726d', '#066460', '#005753'
   ],

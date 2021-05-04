@@ -102,12 +102,15 @@ export default class CustomChart extends React.Component {
     } else {
       if (colorset_name.includes("scale")) {
         colorset = colorsets["scale"]
+        if (colorset_name.includes("with_zero")) {
+          colorset = colorsets["scale_with_zero"]
+        }
       } else {
         colorset = colorset_name ? colorsets[colorset_name] : colorsets.unordered;
       }
 
       legend_colorset = colorset.slice(0, number_of_answers);
-      if ( colorset_name == "scale_decreasing") {
+      if ( colorset_name.includes("decreasing")) {
         legend_colorset = legend_colorset.reverse();
       }
 
