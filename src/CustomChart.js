@@ -64,7 +64,7 @@ export default class CustomChart extends React.Component {
         index_neutral_max  = (number_of_answers + 1) / 2;
         index_negative_min = (number_of_answers + 1) / 2;
         index_negative_max = number_of_answers;
-      } else if ( colorset_name.includes("neutral_last") ) {
+      } else if ( number_of_answers % 2 == 1 ) {
         has_neutral = true;
         index_positive_max = (number_of_answers - 1) / 2;
         index_negative_min = (number_of_answers - 1) / 2;
