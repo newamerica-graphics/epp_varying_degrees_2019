@@ -53,7 +53,7 @@ export default class Dashboard extends React.Component {
               </label>
               <Select
                 onChange={this.handleFilterDemographicChange}
-                options={this.props.data.demographic_keys.map(d => d.demographic_key)}
+                options={this.props.data.demographic_keys.filter(d => !d.skip_demographic_key).map(d => d.demographic_key)}
                 className="dashboard-nav__select"
               />
               <h4 className="dashboard-nav__heading">{this.findings_heading}</h4>
