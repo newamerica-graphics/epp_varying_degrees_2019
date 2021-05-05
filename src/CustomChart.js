@@ -30,7 +30,7 @@ export default class CustomChart extends React.Component {
     let demographics = this.question.demographic_keys
       .find(d => d.demographic_key == filter_demographic)
       .demographics
-      .filter(d => d.demographic_total > 0)
+      .filter(d => d.demographic_total >= 50)
       .reverse();
     demographics = data_is_filtered ? demographics.concat(this.question.total) : demographics;
     let number_of_bars = demographics.length;
