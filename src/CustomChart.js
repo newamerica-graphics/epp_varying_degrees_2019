@@ -25,7 +25,6 @@ export default class CustomChart extends React.Component {
     const filter_demographic = this.props.filter_demographic;
 
     let data_is_filtered = filter_demographic != this.total_demographic;
-    let margin_left = data_is_filtered ? 120 : 60;
 
     let demographics = this.question.demographic_keys
       .find(d => d.demographic_key == filter_demographic)
@@ -35,6 +34,15 @@ export default class CustomChart extends React.Component {
     demographics = data_is_filtered ? demographics.concat(this.question.total) : demographics;
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
+
+    let longest_demographic = Math.max(...demographics.map(d => d.demographic_value.length))
+    let longest_demographic_word = demographics.reduce(
+      (accumulator, currentValue) => Math.max(
+        accumulator,
+        ...currentValue.demographic_value.split(' ').map(word => word.length))
+      , 0)
+
+    let margin_left = Math.max(longest_demographic * 5, longest_demographic_word * 10)
 
     let keys = Object.keys(demographics[0]).slice(this.number_of_meta_keys);
     let chart_keys = keys;
