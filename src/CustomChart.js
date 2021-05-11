@@ -2,6 +2,7 @@ import React from "react";
 import { Chart } from "@newamerica/charts";
 import HorizontalStackedBar from "./HorizontalStackedBar";
 import { colorsets } from "./lib/colorsets";
+import { toPng } from 'html-to-image';
 
 export default class CustomChart extends React.Component {
   constructor(props) {
@@ -12,13 +13,43 @@ export default class CustomChart extends React.Component {
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
     this.number_of_meta_keys = 2; // demographic_value and demographic_total
-    this.list_of_nonanswers = this.props.list_of_nonanswers; // "Don't know, Skipped, Refused" // TODO don't hard code
+    this.list_of_nonanswers = this.props.list_of_nonanswers;
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
+    this.handleScreenshot = this.handleScreenshot.bind(this)
   }
 
   handleFilterDemographicChange(e) {
     this.props.onFilterDemographicChange(e.target.value);
+  }
+
+  download(image) {
+    const downloadLink = document.createElement('a');
+    const fileName = 'screen-capture.png';
+
+    downloadLink.href = image;
+    downloadLink.download = fileName;
+    downloadLink.click();
+  }
+
+  handleScreenshot() {
+    let targetElement = document.getElementById(`chart--${this.question.number_specific}`)
+    let viz = document.getElementById('dashboard')
+    viz.classList.add('screenshot-in-progress')
+    toPng(targetElement, {
+      filter: node => node.tagName != 'BUTTON',
+      backgroundColor: 'white',
+      height: targetElement.offsetHeight + 20,
+      width: targetElement.offsetWidth + 20,
+      style: {
+        padding: '10px',
+      },
+    })
+    .then((dataUrl) => this.download(dataUrl))
+    .catch(function (error) {
+      console.error('Screenshot download failed', error);
+    })
+    .then(() => viz.classList.remove('screenshot-in-progress'))
   }
 
   render() {
@@ -138,24 +169,29 @@ export default class CustomChart extends React.Component {
     );
 
     return (
-      <div className={`custom-chart ${this.props.className} ${!this.display_full_question && "custom-chart--partial-chart"}`}>
-        {this.display_full_question && 
-          <div>
-            <h3 className="custom-chart__title">{this.question.content_general}</h3>
-            <ul className="legend">
-              {legend_keys.map((key, i) => {
-                return (
-                  <li 
-                  className="legend__item"
-                  style={{borderColor: legend_colorset[i], backgroundColor: legend_colorset[i]}}
-                  >
-                    {key}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        }
+      <div
+        id={`chart--${this.question.number_specific}`}
+        className={`
+          custom-chart
+          ${this.props.className}
+          ${!this.display_full_question && "custom-chart--partial-chart"}
+        `}
+      >
+        <div className="custom-chart__meta">
+          <h3 className="custom-chart__title">{this.question.content_general}</h3>
+          <ul className="legend">
+            {legend_keys.map((key, i) => {
+              return (
+                <li 
+                className="legend__item"
+                style={{borderColor: legend_colorset[i], backgroundColor: legend_colorset[i]}}
+                >
+                  {key}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
         {this.question.content_specific &&
           <h4 className="custom-chart__title custom-chart__title--specific">{this.question.content_specific}</h4>
         }
@@ -202,15 +238,18 @@ export default class CustomChart extends React.Component {
             />
           )}
         </Chart>
-        <small className="n-value" style={{marginLeft: margin_left}}>
-          n = {this.question.n_size}
-          {/* {(data_is_filtered || number_of_bars == 1)
-            ? (<span>n = {this.question.total[0].demographic_total}</span>)
-            : demographics.map(d => (
-              <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
-            ))
-          } */}
-        </small>
+        <div className="custom-chart__footer">
+          <small className="n-value" style={{marginLeft: margin_left}}>
+            n = {this.question.n_size}
+            {/* {(data_is_filtered || number_of_bars == 1)
+              ? (<span>n = {this.question.total[0].demographic_total}</span>)
+              : demographics.map(d => (
+                <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
+              ))
+            } */}
+          </small>
+          <button onClick={this.handleScreenshot} className="button">Download</button>
+        </div>
       </div>
     );
   }
