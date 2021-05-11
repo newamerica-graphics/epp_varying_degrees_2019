@@ -204,7 +204,7 @@ export default class CustomChart extends React.Component {
           height={(50 * number_of_bars) + 10}
           renderTooltip={({ datum }) => (
             <div>
-              <h4 className="tooltip__title">{datum.bar.data.demographic_value}</h4>
+              <h4 className="tooltip__title">{datum.bar.data.demographic_value} <small className="tooltip__subtitle">n = {datum.bar.data.demographic_total}</small></h4>
               <table className="tooltip-table">
                 {chart_keys.map((key, i) => {
                   let is_positive =  datum.bar.data[key] > 0;
