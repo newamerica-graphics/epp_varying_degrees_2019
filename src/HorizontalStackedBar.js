@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { BarStackHorizontal, Line } from "@vx/shape";
+import { BarStackHorizontal } from "@vx/shape";
 import { Group } from "@vx/group";
-import { AxisBottom, AxisLeft } from "@vx/axis";
+import { AxisLeft } from "@vx/axis";
 import { scaleBand, scaleLinear, scaleOrdinal } from "@vx/scale";
-import { GridColumns, GridRows } from "@vx/grid";
+import { GridColumns } from "@vx/grid";
 import { Text } from "@vx/text";
 import { max } from "d3-array";
 
@@ -16,13 +16,11 @@ const HorizontalStackedBar = ({
   data,
   y,
   yFormat,
-  xFormat,
   yAxisLabel,
-  xAxisLabel,
-  numTicksX,
   keys,
   colors,
-  margin
+  margin,
+  questionNumber
 }) => {
   const totals = data.reduce((acc, cur) => {
     const t = keys.reduce((total, key) => {
@@ -95,11 +93,14 @@ const HorizontalStackedBar = ({
                   >
                     <rect
                       className="bar__rectangle"
+                      clip-path={`url(#clip-${questionNumber}-${barStack.index}-${bar.index})`}
                       x={bar.x}
                       y={bar.bar.data.demographic_value == "Total" ? bar.y - total_bar_offset : bar.y}
                       width={bar.width}
                       height={bar.height}
                       fill={bar.color}
+                      stroke={bar.color}
+                      strokeWidth="4"
                       onMouseLeave={handleMouseLeave ? handleMouseLeave : null}
                       onMouseMove={event =>
                         handleMouseMove
@@ -107,6 +108,14 @@ const HorizontalStackedBar = ({
                           : null
                       }
                     />
+                    <clipPath id={`clip-${questionNumber}-${barStack.index}-${bar.index}`}>
+                      <rect
+                        x={bar.x}
+                        y={bar.y}
+                        width={bar.width}
+                        height={bar.height}
+                      />
+                    </clipPath>
                     <Text
                       x={bar.x + 5}
                       y={bar.y + 0.5 * bar.height - (bar.bar.data.demographic_value == "Total" ? total_bar_offset : 0)}

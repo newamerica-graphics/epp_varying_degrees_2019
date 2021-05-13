@@ -208,7 +208,8 @@ h1, h2, h3, h4, h5, h6
 	$root: &
 
 	&__rectangle
-		transition: filter $transition--bar
+		transition: fill-opacity $transition--bar, stroke-opacity $transition--bar, stroke $transition--bar
+		stroke-opacity: 0
 
 	&__text
 		fill: $color__text
@@ -242,20 +243,24 @@ h1, h2, h3, h4, h5, h6
 		#{$root}__text
 			fill: white
 
-.bars
-	&:hover
-		.bar__rectangle
-			filter: grayscale(100%) brightness(130%)
+.bars:hover
+	.bar__rectangle
+		stroke-opacity: 1
 
-		.bar-stack
-			&:hover
-				.bar__rectangle
-					filter: grayscale(20%) brightness(110%)
-		
-		.bar
-			&:hover
-				.bar__rectangle
-					filter: saturate(130%) brightness(70%)
+	.bar:not(:hover)
+		.bar__rectangle
+			fill-opacity: 0
+
+	.bar-stack:hover .bar
+		&:not(:hover)
+			.bar__rectangle
+				fill-opacity: 1
+
+.bar:hover
+	.bar__rectangle
+		stroke: $color__text
+	.bar__text
+		font-weight: bold
 
 .logo-text
 	font-size: 12px

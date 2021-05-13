@@ -229,6 +229,7 @@ export default class CustomChart extends React.Component {
         >
           {props => (
             <HorizontalStackedBar
+              questionNumber={this.question.number_specific}
               data={demographics_percent}
               y={d => d.demographic_value}
               keys={chart_keys}
