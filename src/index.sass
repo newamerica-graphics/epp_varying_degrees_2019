@@ -168,6 +168,9 @@ h1, h2, h3, h4, h5, h6
 	&:hover
 		color: $color__text
 
+.vx-tooltip-portal
+	z-index: 1000
+
 .tooltip
 	&__title
 		margin: 0 0 0.3em
@@ -217,6 +220,9 @@ h1, h2, h3, h4, h5, h6
 		font-size: 14px
 		transition: fill $transition--bar
 
+		&--outside
+			fill: $color__text--light
+
 	&--color-005E57,  // #005E57
 	&--color-107C74,  // #107C74
 	&--color-209B93,  // #209B93
@@ -251,16 +257,21 @@ h1, h2, h3, h4, h5, h6
 		.bar__rectangle
 			fill-opacity: 0
 
-	.bar-stack:hover .bar
+	.bar-stack:hover .bar,
+	.bar--key-hover
 		&:not(:hover)
 			.bar__rectangle
 				fill-opacity: 1
+			.bar__text--outside
+				font-weight: bold
 
 .bar:hover
 	.bar__rectangle
 		stroke: $color__text
 	.bar__text
 		font-weight: bold
+		&--outside
+			fill: $color__text
 
 .logo-text
 	font-size: 12px

@@ -1,6 +1,7 @@
 import React from "react";
 import { Chart } from "@newamerica/charts";
 import HorizontalStackedBar from "./HorizontalStackedBar";
+import HorizontalGroupedBar from "./HorizontalGroupedBar";
 import { colorsets } from "./lib/colorsets";
 import { toPng } from 'html-to-image';
 
@@ -199,7 +200,52 @@ export default class CustomChart extends React.Component {
           <p class="custom-chart__message">{this.filtered_data_unavailable_text}</p>
         }
 
+        {this.question.chart_type == "grouped_bar" ?
         <Chart
+          maxWidth={758}
+          height={(demographics.length == 1 ? 25 : 15) * number_of_bars * chart_keys.length}
+          renderTooltip={tooltipData => {
+          let datum = tooltipData.datum
+          let data = tooltipData.data[tooltipData.index]
+          return (
+            <div>
+              <h4 className="tooltip__title">{data.demographic_value} <small className="tooltip__subtitle">n = {data.demographic_total}</small></h4>
+              <table className="tooltip-table">
+                {chart_keys.map((key, i) => {
+                  let is_positive =  data[key] > 0;
+                  return (
+                    <tr 
+                    className={`tooltip-table__tr ${(!is_positive && "tooltip-table__tr--zero-value")} ${(datum.key == key && "tooltip-table__tr--active")}`}
+                    style={is_positive ? {borderColor: chart_colorset[i], backgroundColor: chart_colorset[i]} : {}}
+                    >
+                      <td className="tooltip-table__td tooltip-table__td--datum">
+                        {(is_positive && data[key] < 1) 
+                          ? "<1" 
+                          : Math.round(data[key])}
+                        %
+                      </td>
+                      <td className="tooltip-table__td tooltip-table__td--key">{key}</td>
+                    </tr>
+                  );
+                })}
+              </table>
+            </div>
+            )
+          }}
+        >
+          {props => (
+            <HorizontalGroupedBar
+              questionNumber={this.question.number_specific}
+              data={demographics_percent}
+              y={d => d.demographic_value}
+              keys={chart_keys}
+              colors={chart_colorset}
+              margin={{ top: data_is_filtered ? 10 : 0, left: margin_left, right: 0, bottom: 0 }}
+              {...props}
+            />
+          )}
+        </Chart>
+        : <Chart
           maxWidth={758}
           height={(50 * number_of_bars) + 10}
           renderTooltip={({ datum }) => (
@@ -238,7 +284,7 @@ export default class CustomChart extends React.Component {
               {...props}
             />
           )}
-        </Chart>
+        </Chart>}
         <div className="custom-chart__footer">
           <small className="n-value" style={{marginLeft: margin_left}}>
             n = {this.question.n_size}
