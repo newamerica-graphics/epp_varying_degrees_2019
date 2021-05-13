@@ -26,7 +26,7 @@ export default class CustomChart extends React.Component {
 
   download(image) {
     const downloadLink = document.createElement('a');
-    const fileName = 'screen-capture.png';
+    const fileName = `${this.question.number_specific} ${this.props.filter_demographic}.png`;
 
     downloadLink.href = image;
     downloadLink.download = fileName;
