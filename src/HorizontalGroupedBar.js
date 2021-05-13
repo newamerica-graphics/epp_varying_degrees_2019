@@ -47,7 +47,7 @@ const HorizontalGroupedBar = ({
 
   return (
     <Group top={margin.top} left={margin.left}>
-      <GridColumns
+      {/* <GridColumns
         scale={xScale}
         height={yMax}
         top={0}
@@ -62,7 +62,7 @@ const HorizontalGroupedBar = ({
         lineStyle={{strokeOpacity: "0.5"}}
         stroke="#333"
         strokeWidth="2px"
-      />
+      /> */}
       <Group className="bars">
         <BarGroupHorizontal
           data={data}
