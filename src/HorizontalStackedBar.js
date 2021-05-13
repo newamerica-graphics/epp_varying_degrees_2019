@@ -119,7 +119,7 @@ const HorizontalStackedBar = ({
                     <Text
                       x={bar.x + 5}
                       y={bar.y + 0.5 * bar.height - (bar.bar.data.demographic_value == "Total" ? total_bar_offset : 0)}
-                      className="bar__text"
+                      className="bar__text bar__text--inside"
                       verticalAnchor="middle"
                     >
                       {bar.bar.data[bar.key] >= 6.5

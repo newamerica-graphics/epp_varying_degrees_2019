@@ -211,7 +211,7 @@ h1, h2, h3, h4, h5, h6
 	$root: &
 
 	&__rectangle
-		transition: fill-opacity $transition--bar, stroke-opacity $transition--bar, stroke $transition--bar
+		transition: fill $transition--bar, stroke-opacity $transition--bar, stroke $transition--bar
 		stroke-opacity: 0
 
 	&__text
@@ -246,24 +246,23 @@ h1, h2, h3, h4, h5, h6
 	&--color-333333,   // #333333
 	&--color-515151,   // #515151
 	&--color-717171,   // #717171
-		#{$root}__text
+		#{$root}__text--inside
 			fill: white
 
 .bars:hover
 	.bar__rectangle
 		stroke-opacity: 1
 
-	.bar:not(:hover)
+	.bar-stack:not(:hover),
+	.bar-group .bar:not(.bar--key-hover)
 		.bar__rectangle
-			fill-opacity: 0
+			fill: white
+		.bar__text--inside
+			fill: $color__text
 
-	.bar-stack:hover .bar,
-	.bar--key-hover
-		&:not(:hover)
-			.bar__rectangle
-				fill-opacity: 1
-			.bar__text--outside
-				font-weight: bold
+	.bar--key-hover:not(:hover)
+		.bar__text--outside
+			font-weight: bold
 
 .bar:hover
 	.bar__rectangle
