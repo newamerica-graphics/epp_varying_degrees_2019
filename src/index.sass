@@ -3,9 +3,6 @@
 @import styles/na-lite
 @import styles/variables
 
-.na-dataviz
-	margin-bottom: 1rem
-
 .screenshot-in-progress::after
 	content: "Downloading..."
 	position: fixed
@@ -20,77 +17,126 @@
 
 h1, h2, h3, h4, h5, h6
 	margin: 0
-	
-.dashboard-nav
-	&__heading
-		margin: 1.5rem 0 0.5rem
 
-		&--first
-			margin-top: 0
+.dv-dashboard
+	$root: &
 
-	label
-		margin: 0
+	margin-top: 2rem
+	display: grid
+	grid-gap: 2rem
 
-	&__select
-		line-height: 1.5rem
-		padding: 0.25rem 2rem 0.25rem 0.5rem
-		margin: 0
-		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='20' width='20' fill='%236c6c6c' viewBox='0 0 20 20'%3E%3Cpath d='M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z'%3E%3C/path%3E%3C/svg%3E")
+	@media screen and (min-width: 800px)
+		height: calc(100vh - 70px - 65px - 35px - 2rem)
+		grid-template-columns: 1fr 2fr
+		grid-gap: 1rem
+		overflow: hidden
+		
+	&__column
+		@media screen and (min-width: 800px)
+			max-width: 100%
+			height: 100%
+			padding-right: 1rem
+			height: 100%
 
-	.dv-btn-group
+		&--data
+			@media screen and (min-width: 800px)
+				overflow-y: scroll
+				padding-top: 0.5rem
+
+		&--nav
+			display: flex
+			flex-direction: column
+			@media screen and (min-width: 800px)
+				overflow-y: hidden
+
+	&__nav-title
+		flex-shrink: 0
+		margin-bottom: 0.5rem
+
+	&__nav-heading
+		flex-shrink: 0
+		margin:
+			top: 1rem
+			bottom: 0.5rem
+		@media screen and (min-height: 600px)
+			margin:
+				top: 1.5rem
+				bottom: 0.75rem
+		@media screen and (min-height: 700px)
+			margin-top: 2rem
+
+.dv-button-group
+	$root: &
+
+	overflow-y: scroll
+
+	&--findings
 		display: flex
 		flex-direction: column
+		@media screen and (min-height: 600px)
+			flex-shrink: 0
+			overflow-y: auto
+			font-size: 1.1rem
 
-	.dv-btn
-		$padding-horizontal: 0.5em
-		$border-left-width: 0.4em
-		$background-color: $color__chart-background
+	&--filters
+		flex-shrink: 2
+		font-size: 0.8rem
+		@media screen and (min-height: 600px)
+			font-size: 0.85rem
+		@media screen and (min-height: 700px)
+			font-size: 0.9rem
 
-		padding: 0.8em #{$padding-horizontal + $border-left-width}
-		background: $background-color
-		border-radius: 0
+	&__button
+		padding: 0.3em 0
+		background: none
 		border: none
 		text-transform: none
-		font-size: 1rem
-		line-height: 1.2
+		font-size: 1em
+		line-height: 1
 		letter-spacing: 0
 		font-weight: normal
 		text-align: left
 
-		&:not(:first-child)
-			margin-top: 0.4em
-
-		&:hover, &:focus, &:active
-			background-color: darken($background-color, 8)
+		&:hover, &:active
 			cursor: pointer
+			color: $na-color__primary
 
-		&-active
-			border-left: $border-left-width solid $turquoise--light
-			padding-left: $padding-horizontal
+		#{$root}--filters &
+			$padding: 0.3em
+			display: inline-block
+			padding: $padding 1.5*$padding
+			border-radius: 0.5em + $padding
+			border-radius: 0
+			border: 1px solid $grey--medium
+			color: $color__text--light
+			margin:
+				right: $padding
+				bottom: $padding
 
-			&:hover, &:focus, &:active
-				background: $background-color
+			&:hover, &:active
+				color: $na-color__primary
+				border-color: $na-color__primary
+		
+		&--active
+			font-weight: bold
+
+			&:hover, &:active
+				background: none
 				cursor: inherit
 
-.dv-dashboard-wrapper
-	padding-top: 2rem
+			#{$root}--findings &
+				&::before
+					content: "▸ "
+					color: $na-color__primary
 
-.dv-dashboard
-	padding-top: 2rem
-	display: grid
-	grid-gap: 2rem
-
-	@media screen and ( min-width: 800px )
-		height: calc(100vh - 70px - 65px - 35px - 2rem)
-		grid-template-columns: 1fr 2fr
-		grid-gap: 1rem
-		
-		&__column
-			max-width: 100%
-			padding-right: 1rem
-			margin-bottom: 1rem
-			height: calc(100vh - 70px - 65px - 35px - 2rem - 2rem - 1rem)
-			overflow-y: scroll
+			#{$root}--filters &
+				font-weight: normal
+				color: white
+				border-color: $color__text--light
+				background-color: $color__text--light
+				&:hover, &:active
+					color: white
+					background-color: $na-color__primary
 
 .dv-individual-chart
 	background-color: $grey--chart-background
