@@ -295,7 +295,7 @@ export default class CustomChart extends React.Component {
               ))
             } */}
           </small>
-          <button onClick={this.handleScreenshot} className="button">Download</button>
+          <button onClick={this.handleScreenshot} className="download-button">Download</button>
         </div>
       </div>
     );
