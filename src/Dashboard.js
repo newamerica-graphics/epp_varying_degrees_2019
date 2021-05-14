@@ -46,6 +46,7 @@ export default class Dashboard extends React.Component {
             options={this.props.data.findings.map(d => ({id: d.finding_short, text: d.finding_title}))}
             active={this.state.filter_finding}
             className="dv-button-group--findings"
+            style="ol"
           />
           <h4 className="dv-dashboard__nav-heading">{meta.filter_heading}</h4>
           <ButtonGroup

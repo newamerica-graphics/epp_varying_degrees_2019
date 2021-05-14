@@ -70,9 +70,10 @@ h1, h2, h3, h4, h5, h6
 
 	overflow-y: scroll
 
+	&--ol
+		margin: 0
+
 	&--findings
-		display: flex
-		flex-direction: column
 		@media screen and (min-height: 600px)
 			flex-shrink: 0
 			overflow-y: auto
@@ -86,8 +87,15 @@ h1, h2, h3, h4, h5, h6
 		@media screen and (min-height: 700px)
 			font-size: 0.9rem
 
+	&__li
+		font: inherit
+		margin-bottom: 0.3em
+		&--active
+			&::marker
+				font-weight: bold
+
 	&__button
-		padding: 0.3em 0
+		padding: 0
 		background: none
 		border: none
 		text-transform: none
@@ -96,10 +104,14 @@ h1, h2, h3, h4, h5, h6
 		letter-spacing: 0
 		font-weight: normal
 		text-align: left
+		color: inherit
 
 		&:hover, &:active
 			cursor: pointer
 			color: $na-color__primary
+
+		#{$root}--ol &
+			line-height: inherit
 
 		#{$root}--filters &
 			$padding: 0.3em
@@ -123,11 +135,6 @@ h1, h2, h3, h4, h5, h6
 			&:hover, &:active
 				background: none
 				cursor: inherit
-
-			#{$root}--findings &
-				&::before
-					content: "▸ "
-					color: $na-color__primary
 
 			#{$root}--filters &
 				font-weight: normal

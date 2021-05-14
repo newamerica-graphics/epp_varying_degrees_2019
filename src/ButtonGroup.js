@@ -16,11 +16,27 @@ class ButtonGroup extends React.Component {
   }
 
   render() {
-    const { options } = this.props;
+    const { options, style, className } = this.props;
     const { active } = this.state;
     return (
-      <div className={`dv-button-group ${this.props.className}`} role="group">
-        {options.map(option => (
+      (style == "ol") ?
+      <ol className={`dv-button-group ${style && `dv-button-group--${style}`} ${className}`} role="group">
+        {options.map(option =>
+          <li className={`dv-button-group__li ${active === option.id ? "dv-button-group__li--active" : ""}`}>
+              <a
+                type="button"
+                href="#"
+                className={`dv-button-group__button ${active === option.id ? "dv-button-group__button--active" : ""}`}
+                onClick={this.handleClick}
+                id={option.id}
+              >
+                {option.text}
+              </a>
+          </li>
+        )}
+      </ol>
+      : <div className={`dv-button-group ${this.props.className}`} role="group">
+        {options.map(option => 
           <button
             type="button"
             className={`dv-button-group__button ${active === option.id ? "dv-button-group__button--active" : ""}`}
@@ -29,7 +45,7 @@ class ButtonGroup extends React.Component {
           >
             {option.text}
           </button>
-        ))}
+        )}
       </div>
     );
   }
