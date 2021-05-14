@@ -199,7 +199,11 @@ export default class CustomChart extends React.Component {
           let data = tooltipData.data[tooltipData.index]
           return (
             <div>
-              <h4 className="tooltip__title">{data.demographic_value} <small className="tooltip__subtitle">n = {data.demographic_total}</small></h4>
+              <h4 className="tooltip__title">
+                {data.demographic_value} <small className="tooltip__subtitle">
+                  n = {(this.props.meta.use_manual_n_sizes == "TRUE") ? data.n_size : data.demographic_total}
+                </small>
+              </h4>
               <table className="tooltip-table">
                 {chart_keys.map((key, i) => {
                   let is_positive =  data[key] > 0;
@@ -240,7 +244,11 @@ export default class CustomChart extends React.Component {
           height={(50 * number_of_bars) + 10}
           renderTooltip={({ datum }) => (
             <div>
-              <h4 className="tooltip__title">{datum.bar.data.demographic_value} <small className="tooltip__subtitle">n = {datum.bar.data.demographic_total}</small></h4>
+              <h4 className="tooltip__title">
+                {datum.bar.data.demographic_value} <small className="tooltip__subtitle">
+                  n = {(this.props.meta.use_manual_n_sizes == "TRUE") ? datum.bar.data.n_size : datum.bar.data.demographic_total}
+                </small>
+              </h4>
               <table className="tooltip-table">
                 {chart_keys.map((key, i) => {
                   let is_positive =  datum.bar.data[key] > 0;
@@ -277,13 +285,7 @@ export default class CustomChart extends React.Component {
         </Chart>}
         <div className="custom-chart__footer">
           <small className="n-value" style={{marginLeft: margin_left}}>
-            n = {this.question.n_size}
-            {/* {(data_is_filtered || number_of_bars == 1)
-              ? (<span>n = {this.question.total[0].demographic_total}</span>)
-              : demographics.map(d => (
-                <span className="n-value__item"><strong>{d.demographic_value}</strong> n = {d.demographic_total}</span>
-              ))
-            } */}
+            n = {this.question.total.n_size}
           </small>
           <button onClick={this.handleScreenshot} className="download-button">Download</button>
         </div>

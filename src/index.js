@@ -68,12 +68,12 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
     colorset: q.colorset,
     chart_type: q.chart_type,
     datawrapper_code: q.datawrapper_code,
-    n_size: q.n_size,
     total: {
       demographic_value: "Total",
       demographic_total: Object.keys(q_data).reduce((acc, cur) =>
         acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0)
       , 0),
+      n_size: data.n_sizes.filter(row => row.number_specific == q.number_specific)[0][comparison_demographic],
       data: Object.assign(...q_data.map(row => ({
         [row["Responses"]]: row[comparison_demographic]
       }))),
@@ -91,6 +91,7 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
           demographic_total: Object.keys(response_data).filter(k => k != "Responses").reduce((acc, cur) =>
             acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0)
           , 0),
+          n_size: data.n_sizes.filter(row => row.number_specific == q.number_specific)[0][demographic.demographic_full],
           data: Object.assign(...response_data.map(row => ({
             [row["Responses"]]: row[demographic.demographic_full]
           }))),
