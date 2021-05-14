@@ -64,63 +64,46 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
     let q_data = data.data.filter(d => 
       d["Q Number"] == q.number_specific 
     );
-    return ({
-      number_specific: q.number_specific,
-      content_general: q.content_general,
-      content_specific: q.content_specific,
-      colorset: q.colorset,
-      chart_type: q.chart_type,
-      datawrapper_code: q.datawrapper_code,
-      n_size: q.n_size,
-      total: {
-        demographic_value: "Total",
-        demographic_total:
-          Object.keys(q_data).reduce((acc, cur) =>
-            acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0)
-            , 0),
-        data: Object.assign(
-          ...q_data.map(row => ({
-            [row["Responses"]]:
-              row[comparison_demographic]
-          }))
-        ),
-      },
-      demographic_keys: 
-        data.demographic_keys
-          .map(key => {
-            let demographic_values = data.demographic_values.filter(d => d.demographic_key == key.demographic_key);
-            let response_data = q_data.map(row => 
-                Object.assign(...Object.keys(row)
-                  .filter(k => demographic_values.map(d => d.demographic_full).includes(k) || k == "Responses")
-                  .map(k => ({[k]: row[k]}))
-                )
-              );
-            return ({
-              demographic_key: key.demographic_key,
-              demographics: [
-                ...demographic_values.map(demographic => 
-                  ({
-                    demographic_value: demographic.demographic_value,
-                    demographic_total:
-                      Object.keys(response_data).filter(k => k != "Responses").reduce((acc, cur) =>
-                        acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0)
-                      , 0),
-                    data: Object.assign(
-                      ...response_data.map(row => ({
-                        [row["Responses"]]:
-                          row[demographic.demographic_full]
-                      }))
-                    ),
-                  })
-                )
-              ]
-            })
-          })
-          .reduce((acc,cur) => acc.concat(cur),[])
-    })
-  });
-  for(let i=0; i<queue.length; i++)
-    queue[i]();
+  return ({
+    number_specific: q.number_specific,
+    content_general: q.content_general,
+    content_specific: q.content_specific,
+    colorset: q.colorset,
+    chart_type: q.chart_type,
+    datawrapper_code: q.datawrapper_code,
+    n_size: q.n_size,
+    total: {
+      demographic_value: "Total",
+      demographic_total: Object.keys(q_data).reduce((acc, cur) =>
+        acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0)
+      , 0),
+      data: Object.assign(...q_data.map(row => ({
+        [row["Responses"]]: row[comparison_demographic]
+      }))),
+    },
+    demographic_keys: [...data.demographic_keys.map(key => {
+      let demographic_values = data.demographic_values.filter(d => d.demographic_key == key.demographic_key);
+      let response_data = q_data.map(row => Object.assign(...Object.keys(row)
+        .filter(k => demographic_values.map(d => d.demographic_full).includes(k) || k == "Responses")
+        .map(k => ({[k]: row[k]}))
+      ));
+      return ({
+        demographic_key: key.demographic_key,
+        demographics: [...demographic_values.map(demographic => ({
+          demographic_value: demographic.demographic_value,
+          demographic_total: Object.keys(response_data).filter(k => k != "Responses").reduce((acc, cur) =>
+            acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0)
+          , 0),
+          data: Object.assign(...response_data.map(row => ({
+            [row["Responses"]]: row[demographic.demographic_full]
+          }))),
+        }))],
+      })
+    })],
+  })
+});
+for(let i=0; i<queue.length; i++)
+  queue[i]();
 });
 
 window.renderDataViz = function(el){
