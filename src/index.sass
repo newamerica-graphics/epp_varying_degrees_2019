@@ -21,12 +21,11 @@ h1, h2, h3, h4, h5, h6
 .dv-dashboard
 	$root: &
 
-	margin-top: 2rem
 	display: grid
 	grid-gap: 2rem
 
 	@media screen and (min-width: 800px)
-		height: calc(100vh - 70px - 65px - 35px - 2rem)
+		height: calc(100vh - 70px - 65px)
 		grid-template-columns: 1fr 2fr
 		grid-gap: 1rem
 		overflow: hidden
@@ -41,7 +40,8 @@ h1, h2, h3, h4, h5, h6
 		&--data
 			@media screen and (min-width: 800px)
 				overflow-y: scroll
-				padding-top: 0.5rem
+				padding-top: 2.5rem
+				padding-bottom: 2rem
 
 		&--nav
 			display: flex
@@ -51,7 +51,9 @@ h1, h2, h3, h4, h5, h6
 
 	&__nav-title
 		flex-shrink: 0
-		margin-bottom: 0.5rem
+		margin:
+			top: 2rem
+			bottom: 0.5rem
 
 	&__nav-heading
 		flex-shrink: 0
