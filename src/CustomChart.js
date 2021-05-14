@@ -13,7 +13,6 @@ export default class CustomChart extends React.Component {
     this.display_full_question = this.props.display_full_question;
     this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
     this.total_demographic = this.props.total_demographic;
-    this.number_of_meta_keys = 2; // demographic_value and demographic_total
     this.list_of_nonanswers = this.props.list_of_nonanswers;
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
@@ -76,8 +75,8 @@ export default class CustomChart extends React.Component {
 
     let margin_left = Math.max(longest_demographic * 5, longest_demographic_word * 10)
 
-    let keys = Object.keys(demographics[0]).slice(this.number_of_meta_keys);
-    let chart_keys = keys;
+    let keys = Object.keys(demographics[0].data)
+    let chart_keys = keys
 
     let nonanswers = keys.filter(key => this.list_of_nonanswers.includes(key))
     let answers = keys.filter(key => !this.list_of_nonanswers.includes(key))
@@ -159,15 +158,13 @@ export default class CustomChart extends React.Component {
     } 
 
     let demographics_percent = demographics.map(d => 
-      Object.assign(...Object.keys(d).map(key => 
-        ({
-          [key]: 
-            chart_keys.includes(key) 
-            ? Math.trunc(10000 * d[key] / d.demographic_total) / 100
-            : d[key]
+      Object.assign(
+        d,
+        ...chart_keys.map(key => ({
+          [key]: Math.trunc(10000 * d.data[key] / d.demographic_total) / 100
         })
       ))
-    );
+    )
 
     return (
       <div

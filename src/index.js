@@ -72,19 +72,19 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
       chart_type: q.chart_type,
       datawrapper_code: q.datawrapper_code,
       n_size: q.n_size,
-      total: [
-        Object.assign(
-          {
-            demographic_value: "Total",
-            demographic_total:
-              Object.keys(q_data).reduce((acc,cur) => acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0), 0),
-          }, 
+      total: {
+        demographic_value: "Total",
+        demographic_total:
+          Object.keys(q_data).reduce((acc, cur) =>
+            acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0)
+            , 0),
+        data: Object.assign(
           ...q_data.map(row => ({
             [row["Responses"]]:
               row[comparison_demographic]
           }))
-        )
-      ],
+        ),
+      },
       demographic_keys: 
         data.demographic_keys
           .map(key => {
@@ -99,17 +99,19 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
               demographic_key: key.demographic_key,
               demographics: [
                 ...demographic_values.map(demographic => 
-                  Object.assign(
-                    {
-                      demographic_value: demographic.demographic_value,
-                      demographic_total:
-                        Object.keys(response_data).filter(k => k != "Responses").reduce((acc,cur) => acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0), 0),
-                    }, 
-                    ...response_data.map(row => ({
-                      [row["Responses"]]:
-                        row[demographic.demographic_full]
-                    }))
-                  )
+                  ({
+                    demographic_value: demographic.demographic_value,
+                    demographic_total:
+                      Object.keys(response_data).filter(k => k != "Responses").reduce((acc, cur) =>
+                        acc + (Number(response_data[cur][demographic.demographic_full]) > 0 ? Number(response_data[cur][demographic.demographic_full]) : 0)
+                      , 0),
+                    data: Object.assign(
+                      ...response_data.map(row => ({
+                        [row["Responses"]]:
+                          row[demographic.demographic_full]
+                      }))
+                    ),
+                  })
                 )
               ]
             })
@@ -138,23 +140,29 @@ window.renderDataViz = function(el){
 This is the format for the new questions data object:
 {
   Question-level information (question number and text)
+  ...
+  ...
   total: { // this is for comparison
     demographic_value: "Total",
     demographic_total: "5023",
-    "Much more": "2%", // "Response" for the first value
-    "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
-    ...
-  }
+    data: [
+      "Much more": "2%", // "Response" for the first value
+      "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
+      ...
+    ],
+  },
   demographic_keys: [
     {
       demographic_key: "Total",
       demographics: [
         demographic_value: "2018",
         demographic_total: 5023,
-        "Much more": "2%", // "Response" for the first value
-        "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
-        ...
-      ]
+        data: [
+          "Much more": "2%", // "Response" for the first value
+          "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
+          ...
+        ],
+      ],
     },
     ...
   ]
