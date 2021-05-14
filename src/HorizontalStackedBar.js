@@ -111,7 +111,7 @@ const HorizontalStackedBar = ({
                     <clipPath id={`clip-${questionNumber}-${barStack.index}-${bar.index}`}>
                       <rect
                         x={bar.x}
-                        y={bar.y}
+                        y={bar.bar.data.demographic_value == "Total" ? bar.y - total_bar_offset : bar.y}
                         width={bar.width}
                         height={bar.height}
                       />
