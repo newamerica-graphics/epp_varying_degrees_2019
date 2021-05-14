@@ -10,11 +10,6 @@ export default class CustomChart extends React.Component {
     super(props);
 
     this.question = this.props.question;
-    this.display_full_question = this.props.display_full_question;
-    this.filtered_data_unavailable_text = this.props.filtered_data_unavailable_text;
-    this.total_demographic = this.props.total_demographic;
-    this.list_of_nonanswers = this.props.list_of_nonanswers;
-
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
     this.handleScreenshot = this.handleScreenshot.bind(this)
   }
@@ -55,7 +50,7 @@ export default class CustomChart extends React.Component {
   render() {
     const filter_demographic = this.props.filter_demographic;
 
-    let data_is_filtered = filter_demographic != this.total_demographic;
+    let data_is_filtered = filter_demographic != this.props.total_demographic;
 
     let demographics = this.question.demographic_keys
       .find(d => d.demographic_key == filter_demographic)
@@ -67,25 +62,23 @@ export default class CustomChart extends React.Component {
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
     let longest_demographic = Math.max(...demographics.map(d => d.demographic_value.length))
-    let longest_demographic_word = demographics.reduce(
-      (accumulator, currentValue) => Math.max(
-        accumulator,
-        ...currentValue.demographic_value.split(' ').map(word => word.length))
-      , 0)
+    let longest_demographic_word = demographics.reduce((acc, cur) => Math.max(
+      acc,
+      ...cur.demographic_value.split(' ').map(word => word.length))
+    , 0)
 
     let margin_left = Math.max(longest_demographic * 5, longest_demographic_word * 10)
 
     let keys = Object.keys(demographics[0].data)
     let chart_keys = keys
 
-    let nonanswers = keys.filter(key => this.list_of_nonanswers.includes(key))
-    let answers = keys.filter(key => !this.list_of_nonanswers.includes(key))
-    let number_of_nonanswers = nonanswers.length;
+    let nonanswers = keys.filter(key => this.props.list_of_nonanswers.includes(key))
+    let answers = keys.filter(key => !this.props.list_of_nonanswers.includes(key))
     let number_of_answers = answers.length;
 
     let colorset_name = this.question.colorset;
     let colorset_base = this.props.background_color == "grey" ? colorsets.base.on_grey : colorsets.base.on_white;
-    colorset_base = colorset_base.slice(0, number_of_nonanswers)
+    colorset_base = colorset_base.slice(0, nonanswers.length)
     let { colorset, legend_keys, legend_colorset, chart_colorset } = [];
 
     if (colorset_name.includes("diverging")) {
@@ -172,7 +165,7 @@ export default class CustomChart extends React.Component {
         className={`
           custom-chart
           ${this.props.className}
-          ${!this.display_full_question && "custom-chart--partial-chart"}
+          ${!this.props.display_full_question && "custom-chart--partial-chart"}
         `}
       >
         <div className="custom-chart__meta">
@@ -194,7 +187,7 @@ export default class CustomChart extends React.Component {
           <h4 className="custom-chart__title custom-chart__title--specific">{this.question.content_specific}</h4>
         }
         {filtered_data_unavailable &&
-          <p class="custom-chart__message">{this.filtered_data_unavailable_text}</p>
+          <p class="custom-chart__message">{this.props.meta.filtered_data_unavailable_text}</p>
         }
 
         {this.question.chart_type == "grouped_bar" ?

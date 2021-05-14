@@ -8,8 +8,8 @@ let queue = [];
 let data = null;
 let comparison_demographic = null;
 let total_demographic = null;
-let filtered_data_unavailable_text = null;
-let list_of_nonanswers = [];
+// let filtered_data_unavailable_text = null;
+// let list_of_nonanswers = [];
 let questions = null;
 let finding_question_numbers;
 
@@ -23,10 +23,7 @@ const settings = Object.assign(
           <Dashboard
             data={data}
             questions={questions}
-            comparison_demographic={comparison_demographic}
             total_demographic={total_demographic}
-            filtered_data_unavailable_text={filtered_data_unavailable_text}
-            list_of_nonanswers={list_of_nonanswers}
           />
         ],
         el
@@ -55,8 +52,8 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
   data = _data;
   comparison_demographic = data.meta[0].comparison_demographic;
   total_demographic = data.meta[0].demographic_key_for_total;
-  filtered_data_unavailable_text = data.meta[0].filtered_data_unavailable_text;
-  list_of_nonanswers = data.meta.filter(e => e.list_of_nonanswers).map(e => e.list_of_nonanswers);
+  // filtered_data_unavailable_text = data.meta[0].filtered_data_unavailable_text;
+  // list_of_nonanswers = data.meta.filter(e => e.list_of_nonanswers).map(e => e.list_of_nonanswers);
   finding_question_numbers =  data.finding_questions.map(q => q.question_number);
   questions = data.questions.filter(q => 
     finding_question_numbers.includes(q.number_specific)
