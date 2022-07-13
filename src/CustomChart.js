@@ -57,7 +57,7 @@ export default class CustomChart extends React.Component {
       .demographics
       .filter(d => d.demographic_total >= 50)
       .reverse();
-    demographics = data_is_filtered ? demographics.concat(this.question.total) : demographics;
+    demographics = (data_is_filtered || (demographics.length == 0)) ? demographics.concat(this.question.total) : demographics;
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
@@ -245,9 +245,10 @@ export default class CustomChart extends React.Component {
           renderTooltip={({ datum }) => (
             <div>
               <h4 className="tooltip__title">
-                {datum.bar.data.demographic_value} <small className="tooltip__subtitle">
+                {datum.bar.data.demographic_value}
+                {/* <small className="tooltip__subtitle">
                   n = {(this.props.meta.use_manual_n_sizes == "TRUE") ? datum.bar.data.n_size : datum.bar.data.demographic_total}
-                </small>
+                </small> */}
               </h4>
               <table className="tooltip-table">
                 {chart_keys.map((key, i) => {
