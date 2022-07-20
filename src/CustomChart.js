@@ -245,10 +245,9 @@ export default class CustomChart extends React.Component {
           renderTooltip={({ datum }) => (
             <div>
               <h4 className="tooltip__title">
-                {datum.bar.data.demographic_value}
-                {/* <small className="tooltip__subtitle">
+                {datum.bar.data.demographic_value} <small className="tooltip__subtitle">
                   n = {(this.props.meta.use_manual_n_sizes == "TRUE") ? datum.bar.data.n_size : datum.bar.data.demographic_total}
-                </small> */}
+                </small>
               </h4>
               <table className="tooltip-table">
                 {chart_keys.map((key, i) => {
