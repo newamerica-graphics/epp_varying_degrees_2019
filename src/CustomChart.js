@@ -57,7 +57,10 @@ export default class CustomChart extends React.Component {
       .demographics
       .filter(d => d.demographic_total >= 50)
       .reverse();
-    demographics = (data_is_filtered || (demographics.length == 0)) ? demographics.concat(this.question.total) : demographics;
+    let total = this.question.demographic_keys
+      .find(d => d.demographic_key == 'Total')
+      .demographics
+    demographics = (data_is_filtered || (demographics.length == 0)) ? demographics.concat(total) : demographics;
     let number_of_bars = demographics.length;
     let filtered_data_unavailable = data_is_filtered && number_of_bars == 1;
 
@@ -285,7 +288,7 @@ export default class CustomChart extends React.Component {
         </Chart>}
         <div className="custom-chart__footer">
           <small className="n-value" style={{marginLeft: margin_left}}>
-            n = {this.question.total.n_size}
+            n = {total.n_size}
           </small>
           <button onClick={this.handleScreenshot} className="download-button">Download</button>
         </div>

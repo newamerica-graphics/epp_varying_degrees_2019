@@ -68,16 +68,6 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
     colorset: q.colorset,
     chart_type: q.chart_type,
     datawrapper_code: q.datawrapper_code,
-    total: {
-      demographic_value: "Total",
-      demographic_total: Object.keys(q_data).reduce((acc, cur) =>
-        acc + (Number(q_data[cur][comparison_demographic]) > 0 ? Number(q_data[cur][comparison_demographic]) : 0)
-      , 0),
-      n_size: data.n_sizes.filter(row => row.number_specific == q.number_specific)[0][comparison_demographic],
-      data: Object.assign(...q_data.map(row => ({
-        [row["Responses"]]: row[comparison_demographic]
-      }))),
-    },
     demographic_keys: [...data.demographic_keys.map(key => {
       let demographic_values = data.demographic_values.filter(d => d.demographic_key == key.demographic_key);
       let response_data = q_data.map(row => Object.assign(...Object.keys(row)
@@ -123,27 +113,21 @@ This is the format for the new questions data object:
   Question-level information (question number and text)
   ...
   ...
-  total: { // this is for comparison
-    demographic_value: "Total",
-    demographic_total: "5023",
-    data: [
-      "Much more": "2%", // "Response" for the first value
-      "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
-      ...
-    ],
-  },
   demographic_keys: [
     {
       demographic_key: "Total",
-      demographics: [
-        demographic_value: "2018",
-        demographic_total: 5023,
-        data: [
-          "Much more": "2%", // "Response" for the first value
-          "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
-          ...
+      demographics: {
+        [
+          demographic_value: "2018",
+          demographic_total: 5023,
+          data: [
+            "Much more": "2%", // "Response" for the first value
+            "Somewhat": "5%",  // same as the previous, for an arbitrary number of responses
+            ...
+          ],
         ],
-      ],
+        ...
+      },
     },
     ...
   ]
