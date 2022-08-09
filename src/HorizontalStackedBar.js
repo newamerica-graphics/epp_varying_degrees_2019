@@ -145,7 +145,7 @@ const HorizontalStackedBar = ({
           textAnchor: "end",
           verticalAnchor: "middle",
           fontSize: 14,
-          fontWeight: (d == "2022" || d == "Total") && "bold", // TODO don't hard-code this text
+          fontWeight: (d == "Have Student Loans" || d == "Don't Have Student Loans") && "bold", // TODO don't hard-code this text
           dy: d == "Total" && - total_bar_offset
         })}
       />
