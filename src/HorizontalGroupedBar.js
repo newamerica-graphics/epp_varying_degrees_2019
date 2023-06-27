@@ -165,7 +165,7 @@ const HorizontalGroupedBar = ({
           textAnchor: "end",
           verticalAnchor: "middle",
           fontSize: 14,
-          fontWeight: (d == "2022" || d == "Total") && "bold", // TODO don't hard-code this text
+          fontWeight: (d == "2023" || d == "Total") && "bold", // TODO don't hard-code this text
         })}
         labelProps={{
           textAnchor: "middle",
