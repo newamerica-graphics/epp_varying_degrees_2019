@@ -8,7 +8,7 @@ export default class Dashboard extends React.Component {
     super(props);
     this.state = {
       filter_demographic: this.props.total_demographic,
-      filter_finding: this.props.data.findings[0].finding_short,
+      filter_finding: this.props.initial_finding,
     };
 
     this.handleFilterDemographicChange = this.handleFilterDemographicChange.bind(this);
@@ -17,6 +17,10 @@ export default class Dashboard extends React.Component {
     this.data = this.props.data;
     this.demographics = this.props.data.demographic_keys.filter(d => !d.skip_demographic_key)
     this.finding_questions = this.props.data.finding_questions
+  }
+
+  componentDidMount() {
+    this.props.initial_question && document.getElementById(`chart--${this.props.initial_question}`).scrollIntoView()
   }
   
   handleFilterDemographicChange(demographic) {
@@ -34,8 +38,8 @@ export default class Dashboard extends React.Component {
       .map(q => q.question_number);
     let previous_question;
 
-    window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"])for(var e in a.data["datawrapper-height"]){var t=document.getElementById("datawrapper-chart-"+e)||document.querySelector("iframe[src*='"+e+"']");t&&(t.style.height=a.data["datawrapper-height"][e]+"px")}}))
-      
+    window.addEventListener("message", (function (a) { if (void 0 !== a.data["datawrapper-height"]) for (var e in a.data["datawrapper-height"]) { var t = document.getElementById("datawrapper-chart-" + e) || document.querySelector("iframe[src*='" + e + "']"); t && (t.style.height = a.data["datawrapper-height"][e] + "px") } }))
+
     return (
       <ChartContainer className="dv-dashboard">
         <nav className="dv-dashboard__column dv-dashboard__column--nav">

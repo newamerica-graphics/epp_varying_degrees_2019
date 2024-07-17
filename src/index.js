@@ -8,6 +8,9 @@ let queue = [];
 let data = null;
 let comparison_demographic = null;
 let total_demographic = null;
+let search_params = new URLSearchParams(location.search)
+let initial_finding = search_params.get('finding');
+let initial_question = initial_finding ? search_params.get('question') : null
 // let filtered_data_unavailable_text = null;
 // let list_of_nonanswers = [];
 let questions = null;
@@ -24,6 +27,8 @@ const settings = Object.assign(
             data={data}
             questions={questions}
             total_demographic={total_demographic}
+            initial_finding={initial_finding}
+            initial_question={initial_question}
           />
         ],
         el
@@ -54,7 +59,8 @@ fetch('https://na-data-sheetsstorm.s3.us-west-2.amazonaws.com/prod/epp/varying_d
   total_demographic = data.meta[0].demographic_key_for_total;
   // filtered_data_unavailable_text = data.meta[0].filtered_data_unavailable_text;
   // list_of_nonanswers = data.meta.filter(e => e.list_of_nonanswers).map(e => e.list_of_nonanswers);
-  finding_question_numbers =  data.finding_questions.map(q => q.question_number);
+  finding_question_numbers = data.finding_questions.map(q => q.question_number);
+  initial_finding = initial_finding || data.findings[0].finding_short
   questions = data.questions.filter(q => 
     finding_question_numbers.includes(q.number_specific)
   ).map(q => {
